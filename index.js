@@ -37,10 +37,17 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 // Fonction pour scraper les résultats de foot avec détails supplémentaires
 async function fetchFootballResults() {
   try {
-    const response = await axios.get(
-      "https://www.footmercato.net/live/europe/2025-03-23"
-    );
+    const url = "https://www.footmercato.net/live"; // URL du site à scraper
+    const response = await axios.get(url);
     const $ = cheerio.load(response.data);
+
+    // Extraire la date depuis l'URL
+    const urlParts = url.split("/");
+    const lastPart = urlParts[urlParts.length - 1];
+    const dateFromUrl = lastPart.match(/^\d{4}-\d{2}-\d{2}$/) ? lastPart : null;
+
+    // Utiliser la date extraite ou la date du jour
+    const date = dateFromUrl || new Date().toISOString().split("T")[0];
 
     const results = [];
     $(".matchesGroup__match").each((index, element) => {
@@ -61,13 +68,6 @@ async function fetchFootballResults() {
         .text()
         .trim();
       const time = $(element).find(".matchFull__infosDate time").text().trim();
-      // const homeFlag = $(element)
-      //   .find(".matchFull__team:first-child .matchTeam__logo")
-      //   .attr("data-src");
-      // const awayFlag = $(element)
-      //   .find(".matchFull__team:last-child .matchTeam__logo")
-      //   .attr("data-src");
-      // const matchLink = $(element).find(".matchFull__link").attr("href");
 
       const homeScorers = [];
       $(element)
@@ -93,23 +93,18 @@ async function fetchFootballResults() {
         homeScore,
         awayScore,
         time,
-        // homeFlag,
-        // awayFlag,
-        // matchLink,
         homeScorers,
         awayScorers,
       });
     });
 
     // Préparer les résultats pour l'écriture dans un fichier
-    let output = "Résultats des matchs avec détails :\n";
+    let output = `Matchs du ${date} :\n`;
     results.forEach((result, index) => {
       output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
         result.awayTeam
       } (${result.awayScore})\n`;
       output += `   Heure : ${result.time}\n`;
-      // output += `   Drapeaux : ${result.homeFlag} vs ${result.awayFlag}\n`;
-      // output += `   Lien du match : ${result.matchLink}\n`;
       output += "   Buteurs équipe domicile :\n";
       result.homeScorers.forEach(
         (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)
