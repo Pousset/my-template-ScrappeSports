@@ -124,10 +124,185 @@ async function fetchFootballResults() {
   }
 }
 
+async function fetchFootballResultsFromLequipe() {
+  try {
+    const baseUrl = "https://www.lequipe.fr";
+    const url = `${baseUrl}/Directs/`; // URL de la page principale des directs
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    // Trouver le lien vers la section "Football"
+    const footballLink = $("a.Link.LiveListingWidget__title")
+      .filter((_, element) => $(element).text().trim() === "Football")
+      .attr("href");
+
+    if (!footballLink) {
+      console.log("Lien vers la section Football introuvable.");
+      return;
+    }
+
+    // Construire l'URL complète pour la section Football
+    const footballUrl = `${baseUrl}${footballLink}`;
+    console.log(`Scraping des résultats de football depuis : ${footballUrl}`);
+
+    // Charger la page des résultats de football
+    const footballResponse = await axios.get(footballUrl);
+    const footballPage = cheerio.load(footballResponse.data);
+
+    const results = [];
+    footballPage(".SportEventWidget--match").each((index, element) => {
+      const homeTeam = footballPage(element)
+        .find(".TeamScore__team--home .TeamScore__nameshort span")
+        .text()
+        .trim();
+      const awayTeam = footballPage(element)
+        .find(".TeamScore__team--away .TeamScore__nameshort span")
+        .text()
+        .trim();
+      const homeScore = footballPage(element)
+        .find(".TeamScore__score--home")
+        .text()
+        .trim();
+      const awayScore = footballPage(element)
+        .find(".TeamScore__score--away")
+        .text()
+        .trim();
+      const time = footballPage(element)
+        .find(".TeamScore__schedule span")
+        .text()
+        .trim();
+
+      results.push({
+        homeTeam,
+        awayTeam,
+        homeScore,
+        awayScore,
+        time,
+      });
+    });
+
+    // Vérifier si des résultats ont été récupérés
+    if (results.length === 0) {
+      console.log("Aucun résultat trouvé pour les matchs de football.");
+      return;
+    }
+
+    // Préparer les résultats pour l'écriture dans un fichier
+    let output = `Résultats des matchs de football :\n`;
+    results.forEach((result, index) => {
+      output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
+        result.awayTeam
+      } (${result.awayScore})\n`;
+      output += `   Heure : ${result.time}\n\n`;
+    });
+
+    // Écrire les résultats dans un fichier texte spécifique
+    fs.writeFileSync("resultats_football.txt", output, "utf8");
+    console.log(
+      "Les résultats de football ont été enregistrés dans resultats_football.txt"
+    );
+  } catch (error) {
+    console.error("Erreur lors du scraping :", error);
+  }
+}
+
+async function fetchAllSportsResults() {
+  try {
+    const baseUrl = "https://www.lequipe.fr";
+    const url = `${baseUrl}/Directs/20250316`; // URL de la page principale des directs
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+
+    // Trouver tous les liens des sports
+    const sportsLinks = [];
+    $("a.Link.LiveListingWidget__title").each((_, element) => {
+      const sportName = $(element).text().trim();
+      const sportLink = $(element).attr("href");
+      if (sportName && sportLink) {
+        sportsLinks.push({ name: sportName, url: `${baseUrl}${sportLink}` });
+      }
+    });
+
+    if (sportsLinks.length === 0) {
+      console.log("Aucun sport trouvé sur la page.");
+      return;
+    }
+
+    console.log("Sports trouvés :", sportsLinks);
+
+    // Scraper les données pour chaque sport
+    for (const sport of sportsLinks) {
+      console.log(`Scraping des résultats pour le sport : ${sport.name}`);
+      const sportResponse = await axios.get(sport.url);
+      const sportPage = cheerio.load(sportResponse.data);
+
+      const results = [];
+      sportPage(".SportEventWidget--match").each((_, element) => {
+        const homeTeam = sportPage(element)
+          .find(".TeamScore__team--home .TeamScore__nameshort span")
+          .text()
+          .trim();
+        const awayTeam = sportPage(element)
+          .find(".TeamScore__team--away .TeamScore__nameshort span")
+          .text()
+          .trim();
+        const homeScore = sportPage(element)
+          .find(".TeamScore__score--home")
+          .text()
+          .trim();
+        const awayScore = sportPage(element)
+          .find(".TeamScore__score--away")
+          .text()
+          .trim();
+        const time = sportPage(element)
+          .find(".TeamScore__schedule span")
+          .text()
+          .trim();
+
+        results.push({
+          homeTeam,
+          awayTeam,
+          homeScore,
+          awayScore,
+          time,
+        });
+      });
+
+      // Vérifier si des résultats ont été récupérés
+      if (results.length === 0) {
+        console.log(`Aucun résultat trouvé pour le sport : ${sport.name}`);
+        continue;
+      }
+
+      // Préparer les résultats pour l'écriture dans un fichier
+      let output = `Résultats des matchs de ${sport.name} :\n`;
+      results.forEach((result, index) => {
+        output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
+          result.awayTeam
+        } (${result.awayScore})\n`;
+        output += `   Heure : ${result.time}\n\n`;
+      });
+
+      // Écrire les résultats dans un fichier texte spécifique
+      const fileName = `resultats_${sport.name
+        .toLowerCase()
+        .replace(/ /g, "_")}.txt`;
+      fs.writeFileSync(fileName, output, "utf8");
+      console.log(
+        `Les résultats de ${sport.name} ont été enregistrés dans ${fileName}`
+      );
+    }
+  } catch (error) {
+    console.error("Erreur lors du scraping :", error);
+  }
+}
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
-  fetchFootballResults(); // Appeler la fonction de scraping
+  fetchFootballResults(); // Appeler la fonction existante
+  fetchFootballResultsFromLequipe(); // Appeler la nouvelle fonction
+  fetchAllSportsResults(); // Appeler la fonction pour scraper tous les sports
 });
 
 // Gérer les interactions avec les commandes
