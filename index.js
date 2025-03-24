@@ -2,6 +2,7 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const fs = require("fs"); // Importer le module fs
 
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -14,7 +15,7 @@ const TOKEN =
 async function fetchFootballResults() {
   try {
     const response = await axios.get(
-      "https://www.footmercato.net/live/europe/2025-03-23"
+      "https://www.footmercato.net/live/europe/2025-03-27"
     );
     const $ = cheerio.load(response.data);
 
@@ -77,25 +78,29 @@ async function fetchFootballResults() {
       });
     });
 
-    console.log("Résultats des matchs avec détails :");
+    // Préparer les résultats pour l'écriture dans un fichier
+    let output = "Résultats des matchs avec détails :\n";
     results.forEach((result, index) => {
-      console.log(
-        `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
-          result.awayTeam
-        } (${result.awayScore})`
+      output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
+        result.awayTeam
+      } (${result.awayScore})\n`;
+      output += `   Heure : ${result.time}\n`;
+      output += `   Drapeaux : ${result.homeFlag} vs ${result.awayFlag}\n`;
+      output += `   Lien du match : ${result.matchLink}\n`;
+      output += "   Buteurs équipe domicile :\n";
+      result.homeScorers.forEach(
+        (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)
       );
-      console.log(`   Heure : ${result.time}`);
-      console.log(`   Drapeaux : ${result.homeFlag} vs ${result.awayFlag}`);
-      console.log(`   Lien du match : ${result.matchLink}`);
-      console.log("   Buteurs équipe domicile :");
-      result.homeScorers.forEach((scorer) =>
-        console.log(`     - ${scorer.time} : ${scorer.name}`)
+      output += "   Buteurs équipe extérieure :\n";
+      result.awayScorers.forEach(
+        (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)
       );
-      console.log("   Buteurs équipe extérieure :");
-      result.awayScorers.forEach((scorer) =>
-        console.log(`     - ${scorer.time} : ${scorer.name}`)
-      );
+      output += "\n";
     });
+
+    // Écrire les résultats dans un fichier texte
+    fs.writeFileSync("resultats.txt", output, "utf8");
+    console.log("Les résultats ont été enregistrés dans resultats.txt");
   } catch (error) {
     console.error("Erreur lors du scraping :", error);
   }
