@@ -8,15 +8,15 @@ const {
 } = require("discord.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const fs = require("fs"); // Importer le module fs
+const fs = require("fs");
 
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-const TOKEN = process.env.DISCORD_TOKEN; // Charger le token depuis .env
-const CLIENT_ID = process.env.CLIENT_ID; // Charger le Client ID depuis .env
+const TOKEN = process.env.DISCORD_TOKEN;
+const CLIENT_ID = process.env.CLIENT_ID;
 
-// Enregistrement de la commande slash
+// Enregistrement de la commande /resultats
 const commands = [
   new SlashCommandBuilder()
     .setName("resultats")
@@ -61,13 +61,13 @@ async function fetchFootballResults() {
         .text()
         .trim();
       const time = $(element).find(".matchFull__infosDate time").text().trim();
-      const homeFlag = $(element)
-        .find(".matchFull__team:first-child .matchTeam__logo")
-        .attr("data-src");
-      const awayFlag = $(element)
-        .find(".matchFull__team:last-child .matchTeam__logo")
-        .attr("data-src");
-      const matchLink = $(element).find(".matchFull__link").attr("href");
+      // const homeFlag = $(element)
+      //   .find(".matchFull__team:first-child .matchTeam__logo")
+      //   .attr("data-src");
+      // const awayFlag = $(element)
+      //   .find(".matchFull__team:last-child .matchTeam__logo")
+      //   .attr("data-src");
+      // const matchLink = $(element).find(".matchFull__link").attr("href");
 
       const homeScorers = [];
       $(element)
@@ -93,9 +93,9 @@ async function fetchFootballResults() {
         homeScore,
         awayScore,
         time,
-        homeFlag,
-        awayFlag,
-        matchLink,
+        // homeFlag,
+        // awayFlag,
+        // matchLink,
         homeScorers,
         awayScorers,
       });
@@ -108,8 +108,8 @@ async function fetchFootballResults() {
         result.awayTeam
       } (${result.awayScore})\n`;
       output += `   Heure : ${result.time}\n`;
-      output += `   Drapeaux : ${result.homeFlag} vs ${result.awayFlag}\n`;
-      output += `   Lien du match : ${result.matchLink}\n`;
+      // output += `   Drapeaux : ${result.homeFlag} vs ${result.awayFlag}\n`;
+      // output += `   Lien du match : ${result.matchLink}\n`;
       output += "   Buteurs équipe domicile :\n";
       result.homeScorers.forEach(
         (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)

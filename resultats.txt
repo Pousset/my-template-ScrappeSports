@@ -1,8 +1,6 @@
 Résultats des matchs avec détails :
 1. Real Madrid (2) vs Arsenal (0)
    Heure : 
-   Drapeaux : https://assets-fr.imgfoot.com/media/cache/60x60/club/real-madrid-cf.png vs https://assets-fr.imgfoot.com/media/cache/60x60/arsenal-660.png
-   Lien du match : /live/1127157078751462696-real-madrid-vs-arsenal
    Buteurs équipe domicile :
      - 22' : L. Caicedo
      - 82' : Athenea del Castillo
@@ -10,8 +8,6 @@ Résultats des matchs avec détails :
 
 2. Bayern Munich (0) vs  ()
    Heure : 
-   Drapeaux : https://assets-fr.imgfoot.com/media/cache/60x60/club/bayern-munich.png vs undefined
-   Lien du match : /live/8763355605599436592-bayern-munich-vs-olympique-lyon
    Buteurs équipe domicile :
    Buteurs équipe extérieure :
      - 35' : T. Chawinga
