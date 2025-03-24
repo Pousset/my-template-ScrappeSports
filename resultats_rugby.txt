@@ -1,0 +1,36 @@
+Résultats des matchs de Rugby :
+1. France (F)
+                            (2) () vs Ecosse (F)
+                            (3) ()
+   Heure : 14h00
+
+2. Toulouse
+                            (1) () vs Pau
+                            (7) ()
+   Heure : 14h30
+
+3. Clermont
+                            (9) () vs La Rochelle
+                            (8) ()
+   Heure : 16h30
+
+4. Bayonne
+                            (4) () vs Lyon
+                            (5) ()
+   Heure : 16h30
+
+5. Montpellier
+                            (10) () vs Stade Français
+                            (11) ()
+   Heure : 16h30
+
+6. Vannes
+                            (14) () vs Perpignan
+                            (13) ()
+   Heure : 16h30
+
+7. Castres
+                            (6) () vs Toulon
+                            (3) ()
+   Heure : 21h05
+

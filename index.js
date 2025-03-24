@@ -173,14 +173,6 @@ async function fetchFootballResultsFromLequipe() {
         .find(".TeamScore__schedule span")
         .text()
         .trim();
-      const homeRank = footballPage(element)
-        .find(".TeamScore__team--home .TeamScore__rang")
-        .text()
-        .trim();
-      const awayRank = footballPage(element)
-        .find(".TeamScore__team--away .TeamScore__rang")
-        .text()
-        .trim();
 
       // Vérifier si les données sont valides
       if (!homeTeam || !awayTeam || !homeScore || !awayScore) {
@@ -196,8 +188,6 @@ async function fetchFootballResultsFromLequipe() {
         homeScore,
         awayScore,
         time,
-        homeRank,
-        awayRank,
       });
     });
 
@@ -211,14 +201,8 @@ async function fetchFootballResultsFromLequipe() {
     let output = `Résultats des matchs de football :\n`;
     results.forEach((result, index) => {
       output += `${index + 1}.\n`;
-      output += `   Équipe Domicile :  (${result.homeScore})\n`;
-      output += `   Équipe Extérieure :  (${result.awayScore})\n`;
-      if (result.homeRank) {
-        output += `   Classement actuel (domicile) : ${result.homeRank}\n`;
-      }
-      if (result.awayRank) {
-        output += `   Classement actuel (extérieur) : ${result.awayRank}\n`;
-      }
+      output += `   Équipe Domicile : ${result.homeTeam} (${result.homeScore})\n`;
+      output += `   Équipe Extérieure : ${result.awayTeam} (${result.awayScore})\n`;
       output += `   Heure : ${result.time}\n\n`;
     });
 
@@ -235,7 +219,7 @@ async function fetchFootballResultsFromLequipe() {
 async function fetchAllSportsResults() {
   try {
     const baseUrl = "https://www.lequipe.fr";
-    const url = `${baseUrl}/Directs/20250316`; // URL de la page principale des directs
+    const url = `${baseUrl}/Directs/20250329`; // URL de la page principale des directs
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
