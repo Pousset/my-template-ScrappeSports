@@ -1,15 +1,101 @@
 Résultats des matchs avec détails :
-1. Real Madrid (2) vs Arsenal (0)
+1. Géorgie (6) vs  ()
    Heure : 
    Buteurs équipe domicile :
-     - 22' : L. Caicedo
-     - 82' : Athenea del Castillo
+     - 4' (csc) : V. Haroyan
+     - 14', 35' : G. Mikautadze
+     - 23' : G. Chakvetadze
+     - 27' : O. Kiteishvili
+     - 62' : K. Kvaratskhelia
+   Buteurs équipe extérieure :
+     - 48' : E. Sevikyan
+
+2. Écosse (0) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+   Buteurs équipe extérieure :
+     - 20' : G. Konstantelias
+     - 42' : K. Karetsas
+     - 46' : C. Tzolis
+
+3. Hongrie (0) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+   Buteurs équipe extérieure :
+     - 37' (sp) : H. Çalhanoğlu
+     - 39' : A. Güler
+     - 90' : A. Bardakcı
+
+4. Serbie (2) vs Autriche (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 56' : N. Maksimović
+     - 90' : D. Vlahović
    Buteurs équipe extérieure :
 
-2. Bayern Munich (0) vs  ()
+5. Islande (1) vs  ()
    Heure : 
    Buteurs équipe domicile :
+     - 2' : O. Óskarsson
    Buteurs équipe extérieure :
-     - 35' : T. Chawinga
-     - 65' : M. Dumornay
+     - 35', 45'+3, 79' : V. Muriqi
+
+6. Slovénie (1) vs Slovaquie (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 95' : A. Gnezda Čerin
+   Buteurs équipe extérieure :
+
+7. Irlande (2) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 63' : E. Ferguson
+     - 84' : A. Idah
+   Buteurs équipe extérieure :
+     - 30' : V. Antov
+
+8. Allemagne (3) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 30' (sp) : J. Kimmich
+     - 36' : J. Musiala
+     - 45' : T. Kleindienst
+   Buteurs équipe extérieure :
+     - 49', 69' : M. Kean
+     - 90'+5 (sp) : G. Raspadori
+
+9. Belgique (3) vs Ukraine (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 70' : M. De Cuyper
+     - 75', 86' : R. Lukaku
+   Buteurs équipe extérieure :
+
+10. Portugal (5) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 38' (csc) : J. Andersen
+     - 72' : Cristiano Ronaldo
+     - 86', 91' : Trincão
+     - 115' : Gonçalo Ramos
+   Buteurs équipe extérieure :
+     - 56' : R. Kristensen
+     - 76' : C. Eriksen
+
+11. France (2) vs Croatie (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 52' : M. Olise
+     - 80' : O. Dembélé
+   Buteurs équipe extérieure :
+
+12. Espagne (3) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 8' (sp), 67' : Mikel Oyarzabal
+     - 103' : Lamine Yamal
+   Buteurs équipe extérieure :
+     - 54' (sp) : M. Depay
+     - 79' : I. Maatsen
+     - 109' (sp) : X. Simons
 

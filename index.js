@@ -38,7 +38,7 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 async function fetchFootballResults() {
   try {
     const response = await axios.get(
-      "https://www.footmercato.net/live/europe/2025-03-18"
+      "https://www.footmercato.net/live/europe/2025-03-23"
     );
     const $ = cheerio.load(response.data);
 
@@ -144,8 +144,19 @@ client.on("interactionCreate", async (interaction) => {
       // Lire le contenu du fichier resultats.txt
       const results = fs.readFileSync("resultats.txt", "utf8");
 
-      // Envoyer les résultats dans le channel
-      await interaction.reply(`Voici les résultats :\n\`\`\`${results}\`\`\``);
+      // Diviser le contenu en morceaux de 1990 caractères
+      const chunks = results.match(/[\s\S]{1,1990}/g); // Divise en morceaux de 1990 caractères
+
+      // Envoyer chaque morceau séparément
+      for (let i = 0; i < chunks.length; i++) {
+        if (i === 0) {
+          // Répondre au premier message
+          await interaction.reply(`\`\`\`${chunks[i]}\`\`\``);
+        } else {
+          // Envoyer les messages suivants
+          await interaction.followUp(`\`\`\`${chunks[i]}\`\`\``);
+        }
+      }
     } catch (error) {
       console.error("Erreur lors de la lecture du fichier :", error);
       await interaction.reply("Impossible de lire les résultats.");
