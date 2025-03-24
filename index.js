@@ -117,8 +117,8 @@ async function fetchFootballResults() {
     });
 
     // Écrire les résultats dans un fichier texte
-    fs.writeFileSync("resultats.txt", output, "utf8");
-    console.log("Les résultats ont été enregistrés dans resultats.txt");
+    fs.writeFileSync("resultats_FM.txt", output, "utf8");
+    console.log("Les résultats ont été enregistrés dans FM.txt");
   } catch (error) {
     console.error("Erreur lors du scraping :", error);
   }
@@ -126,7 +126,7 @@ async function fetchFootballResults() {
 
 async function fetchFootballResultsFromLequipe() {
   try {
-    const baseUrl = "https://www.lequipe.fr";
+    const baseUrl = "https://www.lequipe.fr/Directs/20250324";
     const url = `${baseUrl}/Directs/`; // URL de la page principale des directs
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
@@ -154,11 +154,13 @@ async function fetchFootballResultsFromLequipe() {
       const homeTeam = footballPage(element)
         .find(".TeamScore__team--home .TeamScore__nameshort span")
         .text()
-        .trim();
+        .trim()
+        .replace(/\s+/g, " "); // Supprimer les espaces multiples
       const awayTeam = footballPage(element)
         .find(".TeamScore__team--away .TeamScore__nameshort span")
         .text()
-        .trim();
+        .trim()
+        .replace(/\s+/g, " "); // Supprimer les espaces multiples
       const homeScore = footballPage(element)
         .find(".TeamScore__score--home")
         .text()
@@ -171,6 +173,22 @@ async function fetchFootballResultsFromLequipe() {
         .find(".TeamScore__schedule span")
         .text()
         .trim();
+      const homeRank = footballPage(element)
+        .find(".TeamScore__team--home .TeamScore__rang")
+        .text()
+        .trim();
+      const awayRank = footballPage(element)
+        .find(".TeamScore__team--away .TeamScore__rang")
+        .text()
+        .trim();
+
+      // Vérifier si les données sont valides
+      if (!homeTeam || !awayTeam || !homeScore || !awayScore) {
+        console.log(
+          `Match ignoré en raison de données manquantes : ${homeTeam} vs ${awayTeam}`
+        );
+        return; // Ignorer ce match
+      }
 
       results.push({
         homeTeam,
@@ -178,6 +196,8 @@ async function fetchFootballResultsFromLequipe() {
         homeScore,
         awayScore,
         time,
+        homeRank,
+        awayRank,
       });
     });
 
@@ -190,14 +210,20 @@ async function fetchFootballResultsFromLequipe() {
     // Préparer les résultats pour l'écriture dans un fichier
     let output = `Résultats des matchs de football :\n`;
     results.forEach((result, index) => {
-      output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
-        result.awayTeam
-      } (${result.awayScore})\n`;
+      output += `${index + 1}.\n`;
+      output += `   Équipe Domicile :  (${result.homeScore})\n`;
+      output += `   Équipe Extérieure :  (${result.awayScore})\n`;
+      if (result.homeRank) {
+        output += `   Classement actuel (domicile) : ${result.homeRank}\n`;
+      }
+      if (result.awayRank) {
+        output += `   Classement actuel (extérieur) : ${result.awayRank}\n`;
+      }
       output += `   Heure : ${result.time}\n\n`;
     });
 
     // Écrire les résultats dans un fichier texte spécifique
-    fs.writeFileSync("resultats_football.txt", output, "utf8");
+    fs.writeFileSync("resultats_football.txt", output.trim(), "utf8");
     console.log(
       "Les résultats de football ont été enregistrés dans resultats_football.txt"
     );
@@ -227,8 +253,6 @@ async function fetchAllSportsResults() {
       console.log("Aucun sport trouvé sur la page.");
       return;
     }
-
-    console.log("Sports trouvés :", sportsLinks);
 
     // Scraper les données pour chaque sport
     for (const sport of sportsLinks) {
@@ -292,6 +316,9 @@ async function fetchAllSportsResults() {
         `Les résultats de ${sport.name} ont été enregistrés dans ${fileName}`
       );
     }
+
+    // Tous les fichiers ont été créés
+    console.log("Tous les fichiers ont été créés.");
   } catch (error) {
     console.error("Erreur lors du scraping :", error);
   }
@@ -311,8 +338,8 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.commandName === "resultats") {
     try {
-      // Lire le contenu du fichier resultats.txt
-      const results = fs.readFileSync("resultats.txt", "utf8");
+      // Lire le contenu du fichier FootMercato.txt
+      const results = fs.readFileSync("FootMercato.txt", "utf8");
 
       // Diviser les résultats par match
       const matches = results.split("\n\n"); // Chaque match est séparé par une ligne vide

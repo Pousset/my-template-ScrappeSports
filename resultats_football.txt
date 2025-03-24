@@ -1,254 +1,103 @@
-Résultats des matchs de Football :
-1. Lyon
-                            (5) (4) vs Le Havre
-                            (16) (2)
+Résultats des matchs de football :
+1.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (4)
    Heure : 
 
-2. Montpellier
-                            (18) (0) vs Saint-Étienne
-                            (17) (2)
+2.
+   Équipe Domicile :  (2)
+   Équipe Extérieure :  (2)
+   Classement actuel (domicile) : (3)
+   Classement actuel (extérieur) : (1)
    Heure : 
 
-3. Brest
-                            (9) (0) vs Reims
-                            (15) (0)
+3.
+   Équipe Domicile :  (2)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (2)
+   Classement actuel (extérieur) : (5)
    Heure : 
 
-4. Strasbourg
-                            (7) (2) vs Toulouse
-                            (10) (1)
+4.
+   Équipe Domicile :  (2)
+   Équipe Extérieure :  (1)
+   Classement actuel (domicile) : (2)
+   Classement actuel (extérieur) : (1)
    Heure : 
 
-5. Paris-SG
-                            (1) (3) vs Marseille
-                            (2) (1)
+5.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (3)
+   Classement actuel (domicile) : (5)
+   Classement actuel (extérieur) : (4)
    Heure : 
 
-6. Liverpool (1) vs Newcastle (2)
+6.
+   Équipe Domicile :  (1)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (1)
+   Classement actuel (extérieur) : (2)
    Heure : 
 
-7. Venise
-                            (19) (0) vs Naples
-                            (2) (0)
+7.
+   Équipe Domicile :  (2)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (5)
+   Classement actuel (extérieur) : (4)
    Heure : 
 
-8. Bologne
-                            (4) (5) vs Lazio Rome
-                            (6) (0)
+8.
+   Équipe Domicile :  (1)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (2)
+   Classement actuel (extérieur) : (5)
    Heure : 
 
-9. AS Rome
-                            (7) (1) vs Cagliari
-                            (15) (0)
+9.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (3)
+   Classement actuel (domicile) : (2)
+   Classement actuel (extérieur) : (1)
    Heure : 
 
-10. Fiorentina
-                            (8) (3) vs Juventus Turin
-                            (5) (0)
+10.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (5)
+   Classement actuel (extérieur) : (3)
    Heure : 
 
-11. Atalanta Bergame
-                            (3) (0) vs Inter Milan
-                            (1) (2)
+11.
+   Équipe Domicile :  (1)
+   Équipe Extérieure :  (2)
+   Classement actuel (domicile) : (4)
+   Classement actuel (extérieur) : (2)
    Heure : 
 
-12. Arsenal
-                            (2) (1) vs Chelsea
-                            (4) (0)
+12.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (5)
+   Classement actuel (extérieur) : (6)
    Heure : 
 
-13. Fulham
-                            (8) (2) vs Tottenham
-                            (14) (0)
+13.
+   Équipe Domicile :  (1)
+   Équipe Extérieure :  (1)
+   Classement actuel (domicile) : (2)
+   Classement actuel (extérieur) : (4)
    Heure : 
 
-14. Leicester
-                            (19) (0) vs Manchester United
-                            (13) (3)
+14.
+   Équipe Domicile :  (0)
+   Équipe Extérieure :  (0)
+   Classement actuel (domicile) : (1)
+   Classement actuel (extérieur) : (5)
    Heure : 
 
-15. Leganés
-                            (18) (2) vs Betis Séville
-                            (6) (3)
-   Heure : 
-
-16. Séville FC
-                            (10) (0) vs Athletic Bilbao
-                            (4) (1)
-   Heure : 
-
-17. Osasuna
-                            (14) (1) vs Getafe
-                            (11) (2)
-   Heure : 
-
-18. Rayo Vallecano
-                            (9) (2) vs Real Sociedad
-                            (12) (2)
-   Heure : 
-
-19. Atlético de Madrid
-                            (3) (2) vs FC Barcelone
-                            (1) (4)
-   Heure : 
-
-20. Bochum
-                            (16) (1) vs Eintracht Francfort
-                            (4) (3)
-   Heure : 
-
-21. Heidenheim
-                            (17) (3) vs Holstein Kiel
-                            (18) (1)
-   Heure : 
-
-22. VfB Stuttgart
-                            (10) (3) vs Bayer Leverkusen
-                            (2) (4)
-   Heure : 
-
-23. Montpellier (F)
-                            (6) (1) vs Saint-Étienne (F)
-                            (9) (0)
-   Heure : 
-
-24. Arouca
-                            (13) (1) vs Estoril
-                            (8) (1)
-   Heure : 
-
-25. Nacional Madère
-                            (11) (3) vs Casa Pia
-                            (7) (1)
-   Heure : 
-
-26. Rio Ave
-                            (12) (2) vs Benfica
-                            (2) (3)
-   Heure : 
-
-27. Moreirense
-                            (10) (1) vs Boavista
-                            (18) (0)
-   Heure : 
-
-28. Vitoria Guimaraes
-                            (6) (2) vs Estrela Amadora
-                            (15) (0)
-   Heure : 
-
-29. Club Bruges
-                            (2) (4) vs Charleroi SC
-                            (10) (2)
-   Heure : 
-
-30. Anderlecht
-                            (4) (3) vs Cercle Bruges
-                            (13) (0)
-   Heure : 
-
-31. La Gantoise
-                            (6) (1) vs KV Courtrai
-                            (15) (2)
-   Heure : 
-
-32. Standard de Liège
-                            (7) (0) vs Royal Antwerp
-                            (5) (0)
-   Heure : 
-
-33. Beerschot V Anvers
-                            (16) (1) vs Westerlo
-                            (9) (2)
-   Heure : 
-
-34. OH Louvain
-                            (11) (3) vs Saint-Trond
-                            (14) (2)
-   Heure : 
-
-35. FC Malines
-                            (8) (2) vs Dender
-                            (12) (1)
-   Heure : 
-
-36. Celtic Glasgow
-                            (1) (2) vs Glasgow Rangers
-                            (2) (3)
-   Heure : 
-
-37. Dundee Utd
-                            (5) (2) vs Dundee FC
-                            (11) (4)
-   Heure : 
-
-38. Philadelphia Union
-                            (2) (1) vs Nashville SC
-                            (5) (3)
-   Heure : 
-
-39. Portland Timbers
-                            (12) (1) vs Los Angeles Galaxy
-                            (15) (1)
-   Heure : 
-
-40. Atlanta United
-                            (12) (1) vs Inter Miami CF
-                            (1) (2)
-   Heure : 
-
-41. Go Ahead Eagles
-                            (7) (1) vs Willem II
-                            (16) (0)
-   Heure : 
-
-42. FC Groningue
-                            (9) (1) vs Fortuna Sittard
-                            (8) (0)
-   Heure : 
-
-43. FC Twente
-                            (5) (2) vs Feyenoord Rotterdam
-                            (4) (6)
-   Heure : 
-
-44. Ajax Amsterdam
-                            (1) (2) vs AZ Alkmaar
-                            (6) (2)
-   Heure : 
-
-45. Grasshopper Zurich
-                            (11) (1) vs FC Sion
-                            (9) (1)
-   Heure : 
-
-46. FC Bâle
-                            (2) (1) vs Young Boys Berne
-                            (5) (2)
-   Heure : 
-
-47. FC Lugano
-                            (3) (2) vs FC Winterthur
-                            (12) (1)
-   Heure : 
-
-48. Rizespor
-                            (11) (0) vs Bodrumspor
-                            (15) (2)
-   Heure : 
-
-49. Göztepe
-                            (7) (1) vs Eyüpspor
-                            (5) (1)
-   Heure : 
-
-50. Hatayspor
-                            (18) (3) vs Sivasspor
-                            (16) (2)
-   Heure : 
-
-51. Fenerbahçe
-                            (2) (0) vs Samsunspor
-                            (3) (0)
-   Heure : 
-
+15.
+   Équipe Domicile :  (2)
+   Équipe Extérieure :  (1)
+   Classement actuel (domicile) : (3)
+   Classement actuel (extérieur) : (6)
+   Heure :
