@@ -37,7 +37,7 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 // Fonction pour scraper les résultats de foot avec détails supplémentaires
 async function fetchFootballResults() {
   try {
-    const url = "https://www.footmercato.net/live"; // URL du site à scraper
+    const url = "https://www.footmercato.net/live/europe/2025-03-25"; // URL du site à scraper
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
@@ -139,17 +139,38 @@ client.on("interactionCreate", async (interaction) => {
       // Lire le contenu du fichier resultats.txt
       const results = fs.readFileSync("resultats.txt", "utf8");
 
-      // Diviser le contenu en morceaux de 1990 caractères
-      const chunks = results.match(/[\s\S]{1,1990}/g); // Divise en morceaux de 1990 caractères
+      // Diviser les résultats par match
+      const matches = results.split("\n\n"); // Chaque match est séparé par une ligne vide
 
-      // Envoyer chaque morceau séparément
-      for (let i = 0; i < chunks.length; i++) {
+      let currentMessage = "```";
+      const messages = [];
+
+      for (const match of matches) {
+        // Ajouter le match au message actuel si cela ne dépasse pas 2000 caractères
+        if ((currentMessage + match + "\n\n```").length <= 2000) {
+          currentMessage += match + "\n\n";
+        } else {
+          // Si le message dépasse 2000 caractères, sauvegarder le message actuel et commencer un nouveau
+          currentMessage += "```";
+          messages.push(currentMessage);
+          currentMessage = "```" + match + "\n\n";
+        }
+      }
+
+      // Ajouter le dernier message restant
+      if (currentMessage !== "```") {
+        currentMessage += "```";
+        messages.push(currentMessage);
+      }
+
+      // Envoyer les messages un par un
+      for (let i = 0; i < messages.length; i++) {
         if (i === 0) {
           // Répondre au premier message
-          await interaction.reply(`\`\`\`${chunks[i]}\`\`\``);
+          await interaction.reply(messages[i]);
         } else {
           // Envoyer les messages suivants
-          await interaction.followUp(`\`\`\`${chunks[i]}\`\`\``);
+          await interaction.followUp(messages[i]);
         }
       }
     } catch (error) {
