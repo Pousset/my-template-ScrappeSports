@@ -14,7 +14,7 @@ const TOKEN =
 async function fetchFootballResults() {
   try {
     const response = await axios.get(
-      "https://www.footmercato.net/live/europe/"
+      "https://www.footmercato.net/live/europe/2025-03-23"
     );
     const $ = cheerio.load(response.data);
 
@@ -28,17 +28,29 @@ async function fetchFootballResults() {
         .find(".matchFull__team:last-child .matchTeam__name")
         .text()
         .trim();
+      const homeScore = $(element)
+        .find(
+          ".matchFull__team:first-child .matchFull__score, .matchFull__team:first-child .matchFull__score--highlight"
+        )
+        .text()
+        .trim();
+      const awayScore = $(element)
+        .find(
+          ".matchFull__team:last-child .matchFull__score, .matchFull__team:last-child .matchFull__score--highlight"
+        )
+        .text()
+        .trim();
       const time = $(element).find(".matchFull__infosDate time").text().trim();
 
-      results.push({ homeTeam, awayTeam, time });
+      results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
     });
 
     console.log("Résultats des matchs :");
     results.forEach((result, index) => {
       console.log(
-        `${index + 1}. ${result.homeTeam} vs ${result.awayTeam} - Heure : ${
-          result.time
-        }`
+        `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
+          result.awayTeam
+        } (${result.awayScore}) - Heure : ${result.time}`
       );
     });
   } catch (error) {
