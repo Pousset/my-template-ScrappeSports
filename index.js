@@ -1,5 +1,11 @@
-// filepath: c:\Users\mathi\Documents\GitHub\ScrappeDiscord_PYTHON\index.js
-const { Client, GatewayIntentBits } = require("discord.js");
+require("dotenv").config(); // Charger les variables d'environnement
+const {
+  Client,
+  GatewayIntentBits,
+  SlashCommandBuilder,
+  REST,
+  Routes,
+} = require("discord.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs"); // Importer le module fs
@@ -7,15 +13,32 @@ const fs = require("fs"); // Importer le module fs
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// Token de votre bot (remplacez par votre token)
-const TOKEN =
-  "MTM1MzQ5NzEzMzQ1NzczNTc2Mg.GzroxV.x1Yp_YgxznlL1mw7ha7rdJW_81f9HQO61DbtM0";
+const TOKEN = process.env.DISCORD_TOKEN; // Charger le token depuis .env
+const CLIENT_ID = process.env.CLIENT_ID; // Charger le Client ID depuis .env
+
+// Enregistrement de la commande slash
+const commands = [
+  new SlashCommandBuilder()
+    .setName("resultats")
+    .setDescription("Affiche les résultats des matchs."),
+];
+
+const rest = new REST({ version: "10" }).setToken(TOKEN);
+
+(async () => {
+  try {
+    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
+    console.log("Commandes bot OK !");
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement des commandes :", error);
+  }
+})();
 
 // Fonction pour scraper les résultats de foot avec détails supplémentaires
 async function fetchFootballResults() {
   try {
     const response = await axios.get(
-      "https://www.footmercato.net/live/europe/2025-03-27"
+      "https://www.footmercato.net/live/europe/2025-03-18"
     );
     const $ = cheerio.load(response.data);
 
@@ -110,6 +133,24 @@ async function fetchFootballResults() {
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
   fetchFootballResults(); // Appeler la fonction de scraping
+});
+
+// Gérer les interactions avec les commandes
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  if (interaction.commandName === "resultats") {
+    try {
+      // Lire le contenu du fichier resultats.txt
+      const results = fs.readFileSync("resultats.txt", "utf8");
+
+      // Envoyer les résultats dans le channel
+      await interaction.reply(`Voici les résultats :\n\`\`\`${results}\`\`\``);
+    } catch (error) {
+      console.error("Erreur lors de la lecture du fichier :", error);
+      await interaction.reply("Impossible de lire les résultats.");
+    }
+  }
 });
 
 // Connectez le bot
