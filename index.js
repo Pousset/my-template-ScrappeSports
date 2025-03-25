@@ -17,10 +17,8 @@ const PORT = 3000;
 
 // Charger les URLs depuis le fichier .env
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
-const FOOTMERCATO_URL = process.env.FOOTMERCATO_URL;
 
 // Extraire les dates des URLs
-const footmercatoDate = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
 const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
 
 // Créez une instance du client Discord
@@ -46,52 +44,6 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
     console.error("Erreur lors de l'enregistrement des commandes :", error);
   }
 })();
-
-// Fonction pour scraper les résultats de FootMercato
-async function fetchFootballResults() {
-  try {
-    const response = await axios.get(FOOTMERCATO_URL);
-    const $ = cheerio.load(response.data);
-
-    // Extraire la date depuis l'URL après "/live/"
-    const date = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
-
-    const results = [];
-    $(".matchesGroup__match").each((_, element) => {
-      const homeTeam = $(element)
-        .find(".matchFull__team:first-child .matchTeam__name")
-        .text()
-        .trim();
-      const awayTeam = $(element)
-        .find(".matchFull__team:last-child .matchTeam__name")
-        .text()
-        .trim();
-      const homeScore = $(element)
-        .find(".matchFull__team:first-child .matchFull__score")
-        .text()
-        .trim();
-      const awayScore = $(element)
-        .find(".matchFull__team:last-child .matchFull__score")
-        .text()
-        .trim();
-      const time = $(element).find(".matchFull__infosDate time").text().trim();
-
-      results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
-    });
-
-    let output = `Matchs du ${date} :\n`;
-    results.forEach((result, index) => {
-      output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
-        result.awayTeam
-      } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
-    });
-
-    fs.writeFileSync("resultats_FM.txt", output, "utf8");
-    console.log(`Résultats de FootMercato enregistrés pour la date : ${date}`);
-  } catch (error) {
-    console.error("Erreur lors du scraping de FootMercato :", error);
-  }
-}
 
 // Fonction pour scraper tous les sports depuis L'Équipe
 async function fetchAllSportsResults() {
@@ -124,16 +76,17 @@ async function fetchAllSportsResults() {
 
       const results = [];
       sportPage(".SportEventWidget--match").each((_, element) => {
+        // Récupérer uniquement le premier <span> pour le nom de l'équipe
         const homeTeam = sportPage(element)
-          .find(".TeamScore__team--home .TeamScore__nameshort span")
+          .find(".TeamScore__team--home .TeamScore__nameshort span:first-child")
           .text()
-          .trim()
-          .replace(/\s+/g, " "); // Nettoyer les espaces
+          .trim();
         const awayTeam = sportPage(element)
-          .find(".TeamScore__team--away .TeamScore__nameshort span")
+          .find(".TeamScore__team--away .TeamScore__nameshort span:first-child")
           .text()
-          .trim()
-          .replace(/\s+/g, " "); // Nettoyer les espaces
+          .trim();
+
+        // Récupérer les scores
         const homeScore = sportPage(element)
           .find(".TeamScore__score--home")
           .text()
@@ -142,11 +95,12 @@ async function fetchAllSportsResults() {
           .find(".TeamScore__score--away")
           .text()
           .trim() || "N/A";
+
+        // Récupérer l'heure
         const time = sportPage(element)
           .find(".TeamScore__schedule span")
           .text()
-          .trim()
-          .replace(/\s+/g, " ") || "N/A"; // Nettoyer les espaces
+          .trim() || "N/A";
 
         results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
       });
@@ -224,7 +178,6 @@ client.once("ready", () => {
   reformatExistingFiles();
 
   // Lancer le scraping
-  fetchFootballResults();
   fetchAllSportsResults();
 });
 
@@ -234,8 +187,8 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.commandName === "resultats") {
     try {
-      // Lire le contenu du fichier FootMercato.txt
-      const results = fs.readFileSync("FootMercato.txt", "utf8");
+      // Lire le contenu du fichier L'Équipe
+      const results = fs.readFileSync("resultats_lequipe.txt", "utf8");
 
       // Diviser les résultats par match
       const matches = results.split("\n\n"); // Chaque match est séparé par une ligne vide
@@ -282,7 +235,6 @@ app.get("/", (req, res) => {
   const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
 
   // Extraire les dates des URLs
-  const footmercatoDate = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
   const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
 
   let htmlContent = `
@@ -348,7 +300,6 @@ app.get("/", (req, res) => {
     <body>
       <h1>Résultats des Matchs</h1>
       <div class="date-info">
-        <p>Date FootMercato : ${footmercatoDate}</p>
         <p>Date L'Équipe : ${lequipeDate}</p>
       </div>
   `;
