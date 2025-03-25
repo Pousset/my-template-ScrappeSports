@@ -19,6 +19,10 @@ const PORT = 3000;
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
 const FOOTMERCATO_URL = process.env.FOOTMERCATO_URL;
 
+// Extraire les dates des URLs
+const footmercatoDate = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
+const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
+
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -277,6 +281,10 @@ client.on("interactionCreate", async (interaction) => {
 app.get("/", (req, res) => {
   const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
 
+  // Extraire les dates des URLs
+  const footmercatoDate = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
+  const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
+
   let htmlContent = `
     <!DOCTYPE html>
     <html lang="fr">
@@ -294,6 +302,12 @@ app.get("/", (req, res) => {
         h1 {
           text-align: center;
           color: #333;
+        }
+        .date-info {
+          text-align: center;
+          margin-bottom: 20px;
+          font-size: 18px;
+          color: #555;
         }
         .file-section {
           margin-bottom: 40px;
@@ -333,6 +347,10 @@ app.get("/", (req, res) => {
     </head>
     <body>
       <h1>Résultats des Matchs</h1>
+      <div class="date-info">
+        <p>Date FootMercato : ${footmercatoDate}</p>
+        <p>Date L'Équipe : ${lequipeDate}</p>
+      </div>
   `;
 
   files.forEach((file) => {
