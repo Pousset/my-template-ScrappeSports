@@ -230,7 +230,12 @@ client.on("interactionCreate", async (interaction) => {
 
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
-  const files = ["resultats_FM.txt", "resultats_basket.txt", "resultats_football.txt"];
+  const files = [
+    { name: "resultats_FM.txt", title: "Résultats FootMercato" },
+    { name: "resultats_basket.txt", title: "Résultats Basket" },
+    { name: "resultats_football.txt", title: "Résultats Football" },
+  ];
+
   let htmlContent = `
     <!DOCTYPE html>
     <html lang="fr">
@@ -239,10 +244,50 @@ app.get("/", (req, res) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Résultats des Matchs</title>
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        h1 { text-align: center; }
-        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
-        .file-section { margin-bottom: 20px; }
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          margin: 20px;
+          background-color: #f9f9f9;
+        }
+        h1 {
+          text-align: center;
+          color: #333;
+        }
+        .file-section {
+          margin-bottom: 40px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+          background-color: #fff;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 10px;
+          text-align: left;
+        }
+        th {
+          background-color: #007bff;
+          color: white;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+        tr:hover {
+          background-color: #e9f5ff;
+        }
+        td {
+          color: #555;
+        }
+        .file-section h2 {
+          color: #007bff;
+          margin-bottom: 10px;
+        }
       </style>
     </head>
     <body>
@@ -250,19 +295,48 @@ app.get("/", (req, res) => {
   `;
 
   files.forEach((file) => {
-    const filePath = path.join(__dirname, file);
+    const filePath = path.join(__dirname, file.name);
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf8");
+      const rows = fileContent.split("\n").filter((line) => line.trim() !== "");
+
       htmlContent += `
         <div class="file-section">
-          <h2>${file}</h2>
-          <pre>${fileContent}</pre>
+          <h2>${file.title}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Match</th>
+                <th>Heure</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      rows.forEach((row, index) => {
+        const matchParts = row.split("Heure :");
+        const match = matchParts[0].trim();
+        const time = matchParts[1] ? matchParts[1].trim() : "N/A";
+
+        htmlContent += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${match}</td>
+            <td>${time}</td>
+          </tr>
+        `;
+      });
+
+      htmlContent += `
+            </tbody>
+          </table>
         </div>
       `;
     } else {
       htmlContent += `
         <div class="file-section">
-          <h2>${file}</h2>
+          <h2>${file.title}</h2>
           <p>Fichier introuvable.</p>
         </div>
       `;
