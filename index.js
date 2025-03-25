@@ -10,7 +10,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-// Charger l'URL principale depuis le fichier .env
+// Charger les URLs depuis le fichier .env
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
 const FOOTMERCATO_URL = process.env.FOOTMERCATO_URL;
 
@@ -32,28 +32,24 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 (async () => {
   try {
     await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
+    console.log("Commandes enregistrées avec succès !");
   } catch (error) {
     console.error("Erreur lors de l'enregistrement des commandes :", error);
   }
 })();
 
-// Fonction pour scraper les résultats de foot avec détails supplémentaires
+// Fonction pour scraper les résultats de FootMercato
 async function fetchFootballResults() {
   try {
-    const url = FOOTMERCATO_URL; // Utiliser l'URL depuis .env
-    const response = await axios.get(url);
+    const response = await axios.get(FOOTMERCATO_URL);
     const $ = cheerio.load(response.data);
 
-    // Extraire la date depuis l'URL
-    const urlParts = url.split("/");
-    const lastPart = urlParts[urlParts.length - 1];
-    const dateFromUrl = lastPart.match(/^\d{4}-\d{2}-\d{2}$/) ? lastPart : null;
-
-    // Utiliser la date extraite ou la date du jour
-    const date = dateFromUrl || new Date().toISOString().split("T")[0];
-
+    const date =
+      FOOTMERCATO_URL.split("/").pop() ||
+      new Date().toISOString().split("T")[0];
     const results = [];
-    $(".matchesGroup__match").each((index, element) => {
+
+    $(".matchesGroup__match").each((_, element) => {
       const homeTeam = $(element)
         .find(".matchFull__team:first-child .matchTeam__name")
         .text()
@@ -72,150 +68,29 @@ async function fetchFootballResults() {
         .trim();
       const time = $(element).find(".matchFull__infosDate time").text().trim();
 
-      const homeScorers = [];
-      $(element)
-        .find(".matchFull__strikers--home .matchFull__striker")
-        .each((_, scorer) => {
-          const time = $(scorer).find(".matchFull__strikerTime").text().trim();
-          const name = $(scorer).find(".matchFull__strikerName").text().trim();
-          homeScorers.push({ time, name });
-        });
-
-      const awayScorers = [];
-      $(element)
-        .find(".matchFull__strikers--away .matchFull__striker")
-        .each((_, scorer) => {
-          const time = $(scorer).find(".matchFull__strikerTime").text().trim();
-          const name = $(scorer).find(".matchFull__strikerName").text().trim();
-          awayScorers.push({ time, name });
-        });
-
-      results.push({
-        homeTeam,
-        awayTeam,
-        homeScore,
-        awayScore,
-        time,
-        homeScorers,
-        awayScorers,
-      });
+      results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
     });
 
-    // Préparer les résultats pour l'écriture dans un fichier
     let output = `Matchs du ${date} :\n`;
     results.forEach((result, index) => {
       output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
         result.awayTeam
-      } (${result.awayScore})\n`;
-      output += `   Heure : ${result.time}\n`;
-      output += "   Buteurs équipe domicile :\n";
-      result.homeScorers.forEach(
-        (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)
-      );
-      output += "   Buteurs équipe extérieure :\n";
-      result.awayScorers.forEach(
-        (scorer) => (output += `     - ${scorer.time} : ${scorer.name}\n`)
-      );
-      output += "\n";
+      } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
     });
 
-    // Écrire les résultats dans un fichier texte
     fs.writeFileSync("resultats_FM.txt", output, "utf8");
+    console.log("Résultats de FootMercato enregistrés dans resultats_FM.txt");
   } catch (error) {
     console.error("Erreur lors du scraping de FootMercato :", error);
   }
 }
 
-async function fetchFootballResultsFromLequipe() {
-  try {
-    const baseUrl = "https://www.lequipe.fr/Directs/20250324";
-    const url = `${baseUrl}/Directs/`; // URL de la page principale des directs
-    const response = await axios.get(url);
-    const $ = cheerio.load(response.data);
-
-    // Trouver le lien vers la section "Football"
-    const footballLink = $("a.Link.LiveListingWidget__title")
-      .filter((_, element) => $(element).text().trim() === "Football")
-      .attr("href");
-
-    if (!footballLink) {
-      return;
-    }
-
-    // Construire l'URL complète pour la section Football
-    const footballUrl = `${baseUrl}${footballLink}`;
-
-    // Charger la page des résultats de football
-    const footballResponse = await axios.get(footballUrl);
-    const footballPage = cheerio.load(footballResponse.data);
-
-    const results = [];
-    footballPage(".SportEventWidget--match").each((index, element) => {
-      const homeTeam = footballPage(element)
-        .find(".TeamScore__team--home .TeamScore__nameshort span")
-        .text()
-        .trim()
-        .replace(/\s+/g, " "); // Supprimer les espaces multiples
-      const awayTeam = footballPage(element)
-        .find(".TeamScore__team--away .TeamScore__nameshort span")
-        .text()
-        .trim()
-        .replace(/\s+/g, " "); // Supprimer les espaces multiples
-      const homeScore = footballPage(element)
-        .find(".TeamScore__score--home")
-        .text()
-        .trim();
-      const awayScore = footballPage(element)
-        .find(".TeamScore__score--away")
-        .text()
-        .trim();
-      const time = footballPage(element)
-        .find(".TeamScore__schedule span")
-        .text()
-        .trim();
-
-      // Vérifier si les données sont valides
-      if (!homeTeam || !awayTeam || !homeScore || !awayScore) {
-        return; // Ignorer ce match
-      }
-
-      results.push({
-        homeTeam,
-        awayTeam,
-        homeScore,
-        awayScore,
-        time,
-      });
-    });
-
-    // Vérifier si des résultats ont été récupérés
-    if (results.length === 0) {
-      return;
-    }
-
-    // Préparer les résultats pour l'écriture dans un fichier
-    let output = `Résultats des matchs de football :\n`;
-    results.forEach((result, index) => {
-      output += `${index + 1}.\n`;
-      output += `   Équipe Domicile : ${result.homeTeam} (${result.homeScore})\n`;
-      output += `   Équipe Extérieure : ${result.awayTeam} (${result.awayScore})\n`;
-      output += `   Heure : ${result.time}\n\n`;
-    });
-
-    // Écrire les résultats dans un fichier texte spécifique
-    fs.writeFileSync("resultats_football.txt", output.trim(), "utf8");
-  } catch (error) {
-    console.error("Erreur lors du scraping :", error);
-  }
-}
-
+// Fonction pour scraper tous les sports depuis L'Équipe
 async function fetchAllSportsResults() {
   try {
-    const url = LEQUIPE_URL; // Utiliser l'URL principale
-    const response = await axios.get(url);
+    const response = await axios.get(LEQUIPE_URL);
     const $ = cheerio.load(response.data);
 
-    // Trouver tous les liens des sports
     const sportsLinks = [];
     $("a.Link.LiveListingWidget__title").each((_, element) => {
       const sportName = $(element).text().trim();
@@ -229,19 +104,18 @@ async function fetchAllSportsResults() {
     });
 
     if (sportsLinks.length === 0) {
+      console.log("Aucun sport trouvé sur la page.");
       return;
     }
 
-    // Scraper les données pour chaque sport
     for (const sport of sportsLinks) {
       const sportResponse = await axios.get(sport.url);
       const sportPage = cheerio.load(sportResponse.data);
 
-      // Extraire la date depuis la page (si disponible)
       const date =
         sportPage(".SportEventWidget__date").text().trim() || "Date inconnue";
-
       const results = [];
+
       sportPage(".SportEventWidget--match").each((_, element) => {
         const homeTeam = sportPage(element)
           .find(".TeamScore__team--home .TeamScore__nameshort span")
@@ -264,21 +138,14 @@ async function fetchAllSportsResults() {
           .text()
           .trim();
 
-        results.push({
-          homeTeam,
-          awayTeam,
-          homeScore,
-          awayScore,
-          time,
-        });
+        results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
       });
 
-      // Vérifier si des résultats ont été récupérés
       if (results.length === 0) {
+        console.log(`Aucun résultat trouvé pour le sport : ${sport.name}`);
         continue;
       }
 
-      // Préparer les résultats pour l'écriture dans un fichier
       let output = `Résultats des matchs de ${sport.name} (${date}) :\n`;
       results.forEach((result, index) => {
         output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
@@ -286,26 +153,24 @@ async function fetchAllSportsResults() {
         } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
       });
 
-      // Écrire les résultats dans un fichier texte spécifique
       const fileName = `resultats_${sport.name
         .toLowerCase()
         .replace(/ /g, "_")}.txt`;
       fs.writeFileSync(fileName, output, "utf8");
+      console.log(`Résultats de ${sport.name} enregistrés dans ${fileName}`);
     }
 
-    // Tous les fichiers ont été créés
     console.log("Tous les fichiers ont été créés.");
   } catch (error) {
-    console.error("Erreur lors du scraping :", error);
+    console.error("Erreur lors du scraping de L'Équipe :", error);
   }
 }
 
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
-  fetchFootballResults(); // Appeler la fonction existante
-  fetchFootballResultsFromLequipe(); // Appeler la nouvelle fonction
-  fetchAllSportsResults(); // Appeler la fonction pour scraper tous les sports
+  fetchFootballResults(); // Scraper FootMercato
+  fetchAllSportsResults(); // Scraper tous les sports, y compris le football
 });
 
 // Gérer les interactions avec les commandes

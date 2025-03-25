@@ -1,25 +1,31 @@
 Résultats des matchs de Basket (Date inconnue) :
-1. Dallas Mavericks (125) vs Philadelphia 76ers (130)
-   Heure : 
+1. Cleveland Cavaliers () vs New York Knicks ()
+   Heure : jeu. 01h00
 
-2. Los Angeles Lakers (107) vs Phoenix Suns (96)
-   Heure : 
+2. Indiana Pacers () vs Charlotte Hornets ()
+   Heure : jeu. 01h00
 
-3. Brooklyn Nets (122) vs Atlanta Hawks (114)
-   Heure : 
+3. Washington Wizards () vs Sacramento Kings ()
+   Heure : jeu. 01h00
 
-4. Cleveland Cavaliers (103) vs Orlando Magic (108)
-   Heure : 
+4. Boston Celtics () vs Miami Heat ()
+   Heure : jeu. 01h30
 
-5. Portland Trail Blazers (105) vs Toronto Raptors (102)
-   Heure : 
+5. Houston Rockets () vs Utah Jazz ()
+   Heure : jeu. 02h00
 
-6. Los Angeles Clippers (123) vs Charlotte Hornets (88)
-   Heure : 
+6. Oklahoma City Thunder () vs Detroit Pistons ()
+   Heure : jeu. 02h00
 
-7. Minnesota Timberwolves (128) vs Utah Jazz (102)
-   Heure : 
+7. Dallas Mavericks () vs Atlanta Hawks ()
+   Heure : jeu. 02h30
 
-8. Milwaukee Bucks (105) vs Oklahoma City Thunder (121)
-   Heure : 
+8. Denver Nuggets () vs San Antonio Spurs ()
+   Heure : jeu. 03h00
+
+9. Los Angeles Clippers () vs New Orleans Pelicans ()
+   Heure : jeu. 04h00
+
+10. Fenerbahçe () vs FC Barcelone ()
+   Heure : 19h45
 
