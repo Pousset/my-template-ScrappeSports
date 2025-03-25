@@ -1,67 +1,25 @@
-Résultats des matchs de Basket :
-1. Fenerbahçe () vs Paris ()
-   Heure : 18h45
-
-2. Monaco () vs Zalgiris Kaunas ()
-   Heure : 19h00SKWEEK
-
-3. FC Barcelone () vs Bayern Munich ()
-   Heure : 20h30
-
-4. Asvel () vs Olympiakos ()
-   Heure : 20h45
-
-5. Partizan Belgrade () vs Alba Berlin ()
-   Heure : 20h45
-
-6. Real Madrid () vs Olimpia Milan ()
-   Heure : 20h45
-
-7. Indiana Pacers (35) vs Minnesota Timberwolves (31)
+Résultats des matchs de Basket (Date inconnue) :
+1. Dallas Mavericks (125) vs Philadelphia 76ers (130)
    Heure : 
 
-8. Orlando Magic (44) vs Los Angeles Lakers (41)
+2. Los Angeles Lakers (107) vs Phoenix Suns (96)
    Heure : 
 
-9. Washington Wizards (38) vs Toronto Raptors (41)
+3. Brooklyn Nets (122) vs Atlanta Hawks (114)
    Heure : 
 
-10. Brooklyn Nets (8) vs Dallas Mavericks (19)
+4. Cleveland Cavaliers (103) vs Orlando Magic (108)
    Heure : 
 
-11. New Orleans Pelicans () vs Philadelphia 76ers ()
-   Heure : 01h00
+5. Portland Trail Blazers (105) vs Toronto Raptors (102)
+   Heure : 
 
-12. Denver Nuggets () vs Chicago Bulls ()
-   Heure : 02h00
+6. Los Angeles Clippers (123) vs Charlotte Hornets (88)
+   Heure : 
 
-13. Phoenix Suns () vs Milwaukee Bucks ()
-   Heure : 03h00
+7. Minnesota Timberwolves (128) vs Utah Jazz (102)
+   Heure : 
 
-14. Sacramento Kings () vs Boston Celtics ()
-   Heure : 03h00
-
-15. Charlotte Hornets () vs Orlando Magic ()
-   Heure : mer. 00h00
-
-16. Detroit Pistons () vs San Antonio Spurs ()
-   Heure : mer. 00h00beIN Sports 4
-
-17. Miami Heat () vs Golden State Warriors ()
-   Heure : mer. 00h30beIN Sports 1
-
-18. New York Knicks () vs Dallas Mavericks ()
-   Heure : mer. 00h30
-
-19. Houston Rockets () vs Atlanta Hawks ()
-   Heure : mer. 01h00
-
-20. Utah Jazz () vs Memphis Grizzlies ()
-   Heure : mer. 02h00
-
-21. Portland Trail Blazers () vs Cleveland Cavaliers ()
-   Heure : mer. 03h00
-
-22. Sacramento Kings () vs Oklahoma City Thunder ()
-   Heure : mer. 03h00
+8. Milwaukee Bucks (105) vs Oklahoma City Thunder (121)
+   Heure : 
 

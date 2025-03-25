@@ -1,101 +1,124 @@
-Matchs du 2025-03-25 :
-1. Moldavie () vs Estonie ()
-   Heure : 18:00
+Matchs du 2025-03-06 :
+1. AZ (1) vs Tottenham (0)
+   Heure : 
    Buteurs équipe domicile :
+     - 18' (csc) : L. Bergvall
    Buteurs équipe extérieure :
 
-2. Gibraltar () vs Tchéquie ()
-   Heure : 20:45
+2. Fenerbahce (1) vs  ()
+   Heure : 
    Buteurs équipe domicile :
+     - 30' : A. Djiku
+   Buteurs équipe extérieure :
+     - 6' : C. Dessers
+     - 42', 81' : V. Černý
+
+3. Real Sociedad (1) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 70' (sp) : Mikel Oyarzabal
+   Buteurs équipe extérieure :
+     - 57' : J. Zirkzee
+
+4. Steaua (1) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 68' : A. Băluță
+   Buteurs équipe extérieure :
+     - 30' : N. Tagliafico
+     - 86', 89' : M. Fofana
+
+5. Plzeň (1) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 53' : R. Durosinmi
+   Buteurs équipe extérieure :
+     - 18' : A. Romagnoli
+     - 90'+8 : G. Isaksen
+
+6. Rome (2) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 56' : Angeliño
+     - 90'+3 : E. Shomurodov
+   Buteurs équipe extérieure :
+     - 50' : I. Williams
+
+7. Bodø/Glimt (3) vs Olympiakos (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 13' (csc) : K. Tzolakis
+     - 45', 55' : K. Høgh
    Buteurs équipe extérieure :
 
-3. Monténégro () vs Îles Féroé ()
-   Heure : 20:45
+8. Ajax (1) vs  ()
+   Heure : 
    Buteurs équipe domicile :
+     - 10' : B. Brobbey
+   Buteurs équipe extérieure :
+     - 27' : H. Larsson
+     - 70' : E. Skhiri
+
+9. Panathinaikos (3) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 5' : K. Świderski
+     - 19' : N. Maksimović
+     - 55' : Tetê
+   Buteurs équipe extérieure :
+     - 20' : L. Beltrán
+     - 23' : N. Fagioli
+
+10. Copenhague (1) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 79' : Gabriel Pereira
+   Buteurs équipe extérieure :
+     - 46' : R. James
+     - 65' : E. Fernández
+
+11. Betis (2) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 48' : C. Bakambu
+     - 75' : Isco
+   Buteurs équipe extérieure :
+     - 51' : João Mendes
+     - 81' : Nélson Oliveira
+
+12. Molde (3) vs  ()
+   Heure : 
+   Buteurs équipe domicile :
+     - 11' : E. Hestad
+     - 17' : K. Eriksen
+     - 43' : F. Gulbrandsen
+   Buteurs équipe extérieure :
+     - 64' : K. Chodyna
+     - 67' : Luquinhas
+
+13. Celje (1) vs Lugano (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 23' : T. Svetlin
    Buteurs équipe extérieure :
 
-4. Macédoine () vs Pays de Galles ()
-   Heure : 20:45
+14. Borac BL (1) vs  ()
+   Heure : 
    Buteurs équipe domicile :
+     - 90'+2 (sp) : D. Vuković
+   Buteurs équipe extérieure :
+     - 34' : D. Beljo
+
+15. Pafos (1) vs Djurgården (0)
+   Heure : 
+   Buteurs équipe domicile :
+     - 65' : M. Tanković
    Buteurs équipe extérieure :
 
-5. Israël () vs Norvège ()
-   Heure : 20:45
+16. Jagiellonia (3) vs Cercle Bruges (0)
+   Heure : 
    Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-6. Liechtenstein () vs Kazakhstan ()
-   Heure : 20:45
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-7. France U19 () vs Italie U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-8. Lettonie U19 () vs Espagne U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-9. Slovénie U19 () vs Finlande U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-10. Autriche U19 () vs Danemark U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-11. Irlande U19 () vs Allemagne U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-12. Islande U19 () vs Hongrie U19 ()
-   Heure : 15:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-13. Géorgie U19 () vs Monténégro U19 ()
-   Heure : 16:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-14. Slovaquie U19 () vs Pologne U19 ()
-   Heure : 16:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-15. Serbie U19 () vs Norvège U19 ()
-   Heure : 17:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-16. Croatie U19 () vs Luxembourg U19 ()
-   Heure : 17:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-17. Rép. Tchèque U19 () vs Pays-Bas U19 ()
-   Heure : 17:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-18. Belgique U19 () vs Israël U19 ()
-   Heure : 17:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-19. Angleterre U19 () vs Portugal U19 ()
-   Heure : 20:00
-   Buteurs équipe domicile :
-   Buteurs équipe extérieure :
-
-20. Turquie U19 () vs Pays de Galles U19 ()
-   Heure : 20:00
-   Buteurs équipe domicile :
+     - 69' (sp), 78' : Afimico Pululu
+     - 75' : T. Romanczuk
    Buteurs équipe extérieure :
 

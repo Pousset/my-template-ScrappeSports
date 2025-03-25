@@ -12,6 +12,7 @@ const fs = require("fs");
 
 // Charger l'URL principale depuis le fichier .env
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
+const FOOTMERCATO_URL = process.env.FOOTMERCATO_URL;
 
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -40,7 +41,7 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 // Fonction pour scraper les résultats de foot avec détails supplémentaires
 async function fetchFootballResults() {
   try {
-    const url = "https://www.footmercato.net/live/europe/2025-03-25"; // URL du site à scraper
+    const url = FOOTMERCATO_URL; // Utiliser l'URL depuis .env
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
@@ -121,9 +122,9 @@ async function fetchFootballResults() {
 
     // Écrire les résultats dans un fichier texte
     fs.writeFileSync("resultats_FM.txt", output, "utf8");
-    console.log("Les résultats ont été enregistrés dans FM.txt");
+    console.log("Les résultats ont été enregistrés dans resultats_FM.txt");
   } catch (error) {
-    console.error("Erreur lors du scraping :", error);
+    console.error("Erreur lors du scraping de FootMercato :", error);
   }
 }
 
@@ -249,6 +250,10 @@ async function fetchAllSportsResults() {
       const sportResponse = await axios.get(sport.url);
       const sportPage = cheerio.load(sportResponse.data);
 
+      // Extraire la date depuis la page (si disponible)
+      const date =
+        sportPage(".SportEventWidget__date").text().trim() || "Date inconnue";
+
       const results = [];
       sportPage(".SportEventWidget--match").each((_, element) => {
         const homeTeam = sportPage(element)
@@ -288,7 +293,7 @@ async function fetchAllSportsResults() {
       }
 
       // Préparer les résultats pour l'écriture dans un fichier
-      let output = `Résultats des matchs de ${sport.name} :\n`;
+      let output = `Résultats des matchs de ${sport.name} (${date}) :\n`;
       results.forEach((result, index) => {
         output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
           result.awayTeam
