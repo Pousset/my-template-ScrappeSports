@@ -76,7 +76,6 @@ async function fetchAllSportsResults() {
 
       const results = [];
       sportPage(".SportEventWidget--match").each((_, element) => {
-        // Récupérer uniquement le premier <span> pour le nom de l'équipe
         const homeTeam = sportPage(element)
           .find(".TeamScore__team--home .TeamScore__nameshort span:first-child")
           .text()
@@ -85,22 +84,15 @@ async function fetchAllSportsResults() {
           .find(".TeamScore__team--away .TeamScore__nameshort span:first-child")
           .text()
           .trim();
-
-        // Récupérer les scores
-        const homeScore = sportPage(element)
-          .find(".TeamScore__score--home")
-          .text()
-          .trim() || "N/A";
-        const awayScore = sportPage(element)
-          .find(".TeamScore__score--away")
-          .text()
-          .trim() || "N/A";
-
-        // Récupérer l'heure
-        const time = sportPage(element)
-          .find(".TeamScore__schedule span")
-          .text()
-          .trim() || "N/A";
+        const homeScore =
+          sportPage(element).find(".TeamScore__score--home").text().trim() ||
+          "N/A";
+        const awayScore =
+          sportPage(element).find(".TeamScore__score--away").text().trim() ||
+          "N/A";
+        const time =
+          sportPage(element).find(".TeamScore__schedule span").text().trim() ||
+          "N/A";
 
         results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
       });
@@ -118,9 +110,11 @@ async function fetchAllSportsResults() {
         } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
       });
 
-      const fileName = `resultats_${sport.name
-        .toLowerCase()
-        .replace(/ /g, "_")}.txt`;
+      const fileName = path.join(
+        __dirname,
+        "data",
+        `resultats_${sport.name.toLowerCase().replace(/ /g, "_")}.txt`
+      );
       fs.writeFileSync(fileName, output, "utf8");
       console.log(
         `Résultats de ${sport.name} enregistrés pour la date : ${date}`
@@ -135,13 +129,15 @@ async function fetchAllSportsResults() {
 
 // Fonction pour nettoyer les fichiers obsolètes
 function cleanObsoleteFiles(currentUrl) {
-  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
+  const dataFolderPath = path.join(__dirname, "data");
+  const files = fs
+    .readdirSync(dataFolderPath)
+    .filter((file) => file.endsWith(".txt"));
 
   files.forEach((file) => {
-    const filePath = path.join(__dirname, file);
+    const filePath = path.join(dataFolderPath, file);
     const content = fs.readFileSync(filePath, "utf8");
 
-    // Vérifier si le fichier contient l'URL actuelle
     const urlMatch = content.match(/^# URL : (.+)$/m);
     if (!urlMatch || urlMatch[1] !== currentUrl) {
       console.log(`Suppression du fichier obsolète : ${file}`);
@@ -152,14 +148,19 @@ function cleanObsoleteFiles(currentUrl) {
 
 // Fonction pour reformater les fichiers existants
 function reformatExistingFiles() {
-  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
+  const dataFolderPath = path.join(__dirname, "data");
+  const files = fs
+    .readdirSync(dataFolderPath)
+    .filter((file) => file.endsWith(".txt"));
 
   files.forEach((file) => {
-    const filePath = path.join(__dirname, file);
+    const filePath = path.join(dataFolderPath, file);
     const content = fs.readFileSync(filePath, "utf8");
 
     // Reformater le contenu
-    const lines = content.split("\n").map((line) => line.trim().replace(/\s+/g, " "));
+    const lines = content
+      .split("\n")
+      .map((line) => line.trim().replace(/\s+/g, " "));
     const reformattedContent = lines.join("\n");
 
     fs.writeFileSync(filePath, reformattedContent, "utf8");
@@ -167,9 +168,21 @@ function reformatExistingFiles() {
   });
 }
 
+// Fonction pour s'assurer que le dossier 'data' existe
+const ensureDataFolderExists = () => {
+  const dataFolderPath = path.join(__dirname, "data");
+  if (!fs.existsSync(dataFolderPath)) {
+    fs.mkdirSync(dataFolderPath);
+    console.log("Dossier 'data' créé.");
+  }
+};
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
+
+  // Vérifier et créer le dossier 'data' si nécessaire
+  ensureDataFolderExists();
 
   // Nettoyer les fichiers obsolètes
   cleanObsoleteFiles(LEQUIPE_URL);
@@ -232,7 +245,9 @@ client.on("interactionCreate", async (interaction) => {
 
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
-  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
+  const files = fs
+    .readdirSync(__dirname)
+    .filter((file) => file.endsWith(".txt"));
 
   // Extraire les dates des URLs
   const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
@@ -329,7 +344,8 @@ app.get("/", (req, res) => {
 
       rows.forEach((row) => {
         const matchParts = row.split("Heure :")[0].trim();
-        const matchRegex = /^(\d+)\.\s+(.+?)\s+\((\d*|N\/A)\)\s+vs\s+(.+?)\s+\((\d*|N\/A)\)\s*(Heure\s*:\s*(.+))?$/;
+        const matchRegex =
+          /^(\d+)\.\s+(.+?)\s+\((\d*|N\/A)\)\s+vs\s+(.+?)\s+\((\d*|N\/A)\)\s*(Heure\s*:\s*(.+))?$/;
         const matchData = matchParts.match(matchRegex);
 
         if (matchData) {
