@@ -1,63 +1,48 @@
-Résultats des matchs de Football (Date inconnue) :
-1. Cannes () vs Reims ()
+Résultats des matchs de Football (20250401) :
+1. Dunkerque () vs Paris-SG ()
+   Heure : 21h10
+
+2. Arsenal
+                            (2) () vs Fulham
+                            (8) ()
+   Heure : 20h45
+
+3. Wolverhampton
+                            (17) () vs West Ham
+                            (16) ()
+   Heure : 20h45Canal+ Live 2
+
+4. Nottingham Forest
+                            (3) () vs Manchester United
+                            (13) ()
    Heure : 21h00
 
-2. Bournemouth
-                            (10) () vs Ipswich
-                            (18) ()
+5. Real Madrid () vs Real Sociedad ()
+   Heure : 21h30la chaine L'Équipe
+
+6. Arminia Bielefeld () vs Bayer Leverkusen ()
    Heure : 20h45
 
-3. Brighton
-                            (7) () vs Aston Villa
-                            (9) ()
-   Heure : 20h45
-
-4. Manchester City
-                            (5) () vs Leicester
-                            (19) ()
-   Heure : 20h45
-
-5. Newcastle
-                            (6) () vs Brentford
-                            (11) ()
-   Heure : 20h45
-
-6. Southampton
-                            (20) () vs Crystal Palace
-                            (12) ()
-   Heure : 20h45
-
-7. Liverpool
-                            (1) () vs Everton
-                            (15) ()
+7. Empoli () vs Bologne ()
    Heure : 21h00
 
-8. Atlético de Madrid () vs FC Barcelone ()
-   Heure : 21h30
-
-9. VfB Stuttgart () vs RB Leipzig ()
-   Heure : 20h45
-
-10. AC Milan () vs Inter Milan ()
-   Heure : 21h00
-
-11. Benfica
-                            (2) () vs Farense
-                            (17) ()
+8. Boavista
+                            (18) () vs Gil Vicente
+                            (14) ()
    Heure : 21h15
 
-12. Feyenoord Rotterdam
-                            (5) () vs FC Groningue
-                            (10) ()
+9. AZ Alkmaar
+                            (6) () vs RKC Waalwijk
+                            (17) ()
    Heure : 20h00
 
-13. FC Sion
-                            (9) () vs FC Winterthur
-                            (12) ()
+10. Servette Genève
+                            (1) () vs Young Boys Berne
+                            (5) ()
    Heure : 20h30
 
-14. FC Zurich
-                            (6) () vs Lausanne-Sport
-                            (7) ()
+11. Yverdon
+                            (10) () vs FC Lugano
+                            (3) ()
    Heure : 20h30
 

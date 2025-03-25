@@ -44,11 +44,10 @@ async function fetchFootballResults() {
     const response = await axios.get(FOOTMERCATO_URL);
     const $ = cheerio.load(response.data);
 
-    const date =
-      FOOTMERCATO_URL.split("/").pop() ||
-      new Date().toISOString().split("T")[0];
-    const results = [];
+    // Extraire la date depuis l'URL après "/live/"
+    const date = FOOTMERCATO_URL.split("/live/")[1] || "Date inconnue";
 
+    const results = [];
     $(".matchesGroup__match").each((_, element) => {
       const homeTeam = $(element)
         .find(".matchFull__team:first-child .matchTeam__name")
@@ -79,7 +78,7 @@ async function fetchFootballResults() {
     });
 
     fs.writeFileSync("resultats_FM.txt", output, "utf8");
-    console.log("Résultats de FootMercato enregistrés dans resultats_FM.txt");
+    console.log(`Résultats de FootMercato enregistrés pour la date : ${date}`);
   } catch (error) {
     console.error("Erreur lors du scraping de FootMercato :", error);
   }
@@ -90,6 +89,9 @@ async function fetchAllSportsResults() {
   try {
     const response = await axios.get(LEQUIPE_URL);
     const $ = cheerio.load(response.data);
+
+    // Extraire la date depuis l'URL après "/Directs/"
+    const date = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
 
     const sportsLinks = [];
     $("a.Link.LiveListingWidget__title").each((_, element) => {
@@ -112,10 +114,7 @@ async function fetchAllSportsResults() {
       const sportResponse = await axios.get(sport.url);
       const sportPage = cheerio.load(sportResponse.data);
 
-      const date =
-        sportPage(".SportEventWidget__date").text().trim() || "Date inconnue";
       const results = [];
-
       sportPage(".SportEventWidget--match").each((_, element) => {
         const homeTeam = sportPage(element)
           .find(".TeamScore__team--home .TeamScore__nameshort span")
@@ -157,7 +156,9 @@ async function fetchAllSportsResults() {
         .toLowerCase()
         .replace(/ /g, "_")}.txt`;
       fs.writeFileSync(fileName, output, "utf8");
-      console.log(`Résultats de ${sport.name} enregistrés dans ${fileName}`);
+      console.log(
+        `Résultats de ${sport.name} enregistrés pour la date : ${date}`
+      );
     }
 
     console.log("Tous les fichiers ont été créés.");
