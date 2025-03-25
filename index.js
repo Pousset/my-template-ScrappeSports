@@ -253,7 +253,6 @@ client.on("interactionCreate", async (interaction) => {
 
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
-  // Lire tous les fichiers .txt dans le répertoire courant
   const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
 
   let htmlContent = `
@@ -287,7 +286,7 @@ app.get("/", (req, res) => {
         th, td {
           border: 1px solid #ddd;
           padding: 10px;
-          text-align: left;
+          text-align: center;
         }
         th {
           background-color: #007bff;
@@ -327,25 +326,41 @@ app.get("/", (req, res) => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Match</th>
-                <th>Heure</th>
+                <th>Team A</th>
+                <th>Team B</th>
+                <th>Score Team A</th>
+                <th>Score Team B</th>
+                <th>Vainqueur</th>
               </tr>
             </thead>
             <tbody>
       `;
 
-      rows.forEach((row, index) => {
-        const matchParts = row.split("Heure :");
-        const match = matchParts[0].trim();
-        const time = matchParts[1] ? matchParts[1].trim() : "N/A";
+      rows.forEach((row) => {
+        const matchParts = row.split("Heure :")[0].trim();
+        const matchRegex = /^(\d+)\.\s+(.+)\((\d+)\)\s+vs\s+(.+)\((\d+)\)$/;
+        const matchData = matchParts.match(matchRegex);
 
-        htmlContent += `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${match}</td>
-            <td>${time}</td>
-          </tr>
-        `;
+        if (matchData) {
+          const [, index, teamA, scoreA, teamB, scoreB] = matchData;
+          const winner =
+            parseInt(scoreA) > parseInt(scoreB)
+              ? teamA.trim()
+              : parseInt(scoreB) > parseInt(scoreA)
+              ? teamB.trim()
+              : "Égalité";
+
+          htmlContent += `
+            <tr>
+              <td>${index}</td>
+              <td>${teamA.trim()}</td>
+              <td>${teamB.trim()}</td>
+              <td>${scoreA}</td>
+              <td>${scoreB}</td>
+              <td>${winner}</td>
+            </tr>
+          `;
+        }
       });
 
       htmlContent += `
