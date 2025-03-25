@@ -230,11 +230,8 @@ client.on("interactionCreate", async (interaction) => {
 
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
-  const files = [
-    { name: "resultats_FM.txt", title: "Résultats FootMercato" },
-    { name: "resultats_basket.txt", title: "Résultats Basket" },
-    { name: "resultats_football.txt", title: "Résultats Football" },
-  ];
+  // Lire tous les fichiers .txt dans le répertoire courant
+  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
 
   let htmlContent = `
     <!DOCTYPE html>
@@ -295,14 +292,14 @@ app.get("/", (req, res) => {
   `;
 
   files.forEach((file) => {
-    const filePath = path.join(__dirname, file.name);
+    const filePath = path.join(__dirname, file);
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf8");
       const rows = fileContent.split("\n").filter((line) => line.trim() !== "");
 
       htmlContent += `
         <div class="file-section">
-          <h2>${file.title}</h2>
+          <h2>${file}</h2>
           <table>
             <thead>
               <tr>
@@ -336,7 +333,7 @@ app.get("/", (req, res) => {
     } else {
       htmlContent += `
         <div class="file-section">
-          <h2>${file.title}</h2>
+          <h2>${file}</h2>
           <p>Fichier introuvable.</p>
         </div>
       `;
