@@ -1,34 +1,67 @@
 Résultats des matchs de Basket :
-1. Bourg-en-Bresse () vs La Rochelle ()
-   Heure : 18h00DAZN
+1. Fenerbahçe () vs Paris ()
+   Heure : 18h45
 
-2. Nancy () vs Strasbourg ()
-   Heure : 18h00
+2. Monaco () vs Zalgiris Kaunas ()
+   Heure : 19h00SKWEEK
 
-3. Saint-Quentin () vs Dijon ()
+3. FC Barcelone () vs Bayern Munich ()
    Heure : 20h30
 
-4. Le Mans () vs Cholet ()
-   Heure : 20h30DAZN
+4. Asvel () vs Olympiakos ()
+   Heure : 20h45
 
-5. Orlando Magic () vs Sacramento Kings ()
-   Heure : 22h00
+5. Partizan Belgrade () vs Alba Berlin ()
+   Heure : 20h45
 
-6. Washington Wizards () vs Brooklyn Nets ()
-   Heure : dim. 00h00
+6. Real Madrid () vs Olimpia Milan ()
+   Heure : 20h45
 
-7. Philadelphia 76ers () vs Miami Heat ()
-   Heure : dim. 00h30
+7. Indiana Pacers (35) vs Minnesota Timberwolves (31)
+   Heure : 
 
-8. Chicago Bulls () vs Dallas Mavericks ()
-   Heure : dim. 03h00
+8. Orlando Magic (44) vs Los Angeles Lakers (41)
+   Heure : 
 
-9. Memphis Grizzlies () vs Los Angeles Lakers ()
-   Heure : dim. 03h00
+9. Washington Wizards (38) vs Toronto Raptors (41)
+   Heure : 
 
-10. Oklahoma City Thunder () vs Indiana Pacers ()
-   Heure : dim. 03h00beIN Sports 4
+10. Brooklyn Nets (8) vs Dallas Mavericks (19)
+   Heure : 
 
-11. San Antonio Spurs () vs Boston Celtics ()
-   Heure : dim. 03h00
+11. New Orleans Pelicans () vs Philadelphia 76ers ()
+   Heure : 01h00
+
+12. Denver Nuggets () vs Chicago Bulls ()
+   Heure : 02h00
+
+13. Phoenix Suns () vs Milwaukee Bucks ()
+   Heure : 03h00
+
+14. Sacramento Kings () vs Boston Celtics ()
+   Heure : 03h00
+
+15. Charlotte Hornets () vs Orlando Magic ()
+   Heure : mer. 00h00
+
+16. Detroit Pistons () vs San Antonio Spurs ()
+   Heure : mer. 00h00beIN Sports 4
+
+17. Miami Heat () vs Golden State Warriors ()
+   Heure : mer. 00h30beIN Sports 1
+
+18. New York Knicks () vs Dallas Mavericks ()
+   Heure : mer. 00h30
+
+19. Houston Rockets () vs Atlanta Hawks ()
+   Heure : mer. 01h00
+
+20. Utah Jazz () vs Memphis Grizzlies ()
+   Heure : mer. 02h00
+
+21. Portland Trail Blazers () vs Cleveland Cavaliers ()
+   Heure : mer. 03h00
+
+22. Sacramento Kings () vs Oklahoma City Thunder ()
+   Heure : mer. 03h00
 

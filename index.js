@@ -10,6 +10,9 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
+// Charger l'URL principale depuis le fichier .env
+const LEQUIPE_URL = process.env.LEQUIPE_URL;
+
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -218,8 +221,7 @@ async function fetchFootballResultsFromLequipe() {
 
 async function fetchAllSportsResults() {
   try {
-    const baseUrl = "https://www.lequipe.fr";
-    const url = `${baseUrl}/Directs/20250329`; // URL de la page principale des directs
+    const url = LEQUIPE_URL; // Utiliser l'URL principale
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
@@ -229,7 +231,10 @@ async function fetchAllSportsResults() {
       const sportName = $(element).text().trim();
       const sportLink = $(element).attr("href");
       if (sportName && sportLink) {
-        sportsLinks.push({ name: sportName, url: `${baseUrl}${sportLink}` });
+        sportsLinks.push({
+          name: sportName,
+          url: `https://www.lequipe.fr${sportLink}`,
+        });
       }
     });
 
@@ -287,8 +292,7 @@ async function fetchAllSportsResults() {
       results.forEach((result, index) => {
         output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
           result.awayTeam
-        } (${result.awayScore})\n`;
-        output += `   Heure : ${result.time}\n\n`;
+        } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
       });
 
       // Écrire les résultats dans un fichier texte spécifique
