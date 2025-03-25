@@ -75,17 +75,17 @@ Résultats des matchs de football :
    Heure : 
 
 16.
-   Équipe Domicile : Indiana Pacers (74)
-   Équipe Extérieure : Minnesota Timberwolves (57)
+   Équipe Domicile : Indiana Pacers (83)
+   Équipe Extérieure : Minnesota Timberwolves (66)
    Heure : 
 
 17.
-   Équipe Domicile : Orlando Magic (77)
-   Équipe Extérieure : Los Angeles Lakers (70)
+   Équipe Domicile : Orlando Magic (81)
+   Équipe Extérieure : Los Angeles Lakers (72)
    Heure : 
 
 18.
-   Équipe Domicile : Washington Wizards (61)
+   Équipe Domicile : Washington Wizards (69)
    Équipe Extérieure : Toronto Raptors (67)
    Heure : 
 
@@ -95,6 +95,6 @@ Résultats des matchs de football :
    Heure : 
 
 20.
-   Équipe Domicile : New Orleans Pelicans (29)
-   Équipe Extérieure : Philadelphia 76ers (23)
+   Équipe Domicile : New Orleans Pelicans (37)
+   Équipe Extérieure : Philadelphia 76ers (25)
    Heure :

@@ -32,7 +32,6 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 (async () => {
   try {
     await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
-    console.log("Commandes bot OK !");
   } catch (error) {
     console.error("Erreur lors de l'enregistrement des commandes :", error);
   }
@@ -122,7 +121,6 @@ async function fetchFootballResults() {
 
     // Écrire les résultats dans un fichier texte
     fs.writeFileSync("resultats_FM.txt", output, "utf8");
-    console.log("Les résultats ont été enregistrés dans resultats_FM.txt");
   } catch (error) {
     console.error("Erreur lors du scraping de FootMercato :", error);
   }
@@ -141,13 +139,11 @@ async function fetchFootballResultsFromLequipe() {
       .attr("href");
 
     if (!footballLink) {
-      console.log("Lien vers la section Football introuvable.");
       return;
     }
 
     // Construire l'URL complète pour la section Football
     const footballUrl = `${baseUrl}${footballLink}`;
-    console.log(`Scraping des résultats de football depuis : ${footballUrl}`);
 
     // Charger la page des résultats de football
     const footballResponse = await axios.get(footballUrl);
@@ -180,9 +176,6 @@ async function fetchFootballResultsFromLequipe() {
 
       // Vérifier si les données sont valides
       if (!homeTeam || !awayTeam || !homeScore || !awayScore) {
-        console.log(
-          `Match ignoré en raison de données manquantes : ${homeTeam} vs ${awayTeam}`
-        );
         return; // Ignorer ce match
       }
 
@@ -197,7 +190,6 @@ async function fetchFootballResultsFromLequipe() {
 
     // Vérifier si des résultats ont été récupérés
     if (results.length === 0) {
-      console.log("Aucun résultat trouvé pour les matchs de football.");
       return;
     }
 
@@ -212,9 +204,6 @@ async function fetchFootballResultsFromLequipe() {
 
     // Écrire les résultats dans un fichier texte spécifique
     fs.writeFileSync("resultats_football.txt", output.trim(), "utf8");
-    console.log(
-      "Les résultats de football ont été enregistrés dans resultats_football.txt"
-    );
   } catch (error) {
     console.error("Erreur lors du scraping :", error);
   }
@@ -240,13 +229,11 @@ async function fetchAllSportsResults() {
     });
 
     if (sportsLinks.length === 0) {
-      console.log("Aucun sport trouvé sur la page.");
       return;
     }
 
     // Scraper les données pour chaque sport
     for (const sport of sportsLinks) {
-      console.log(`Scraping des résultats pour le sport : ${sport.name}`);
       const sportResponse = await axios.get(sport.url);
       const sportPage = cheerio.load(sportResponse.data);
 
@@ -288,7 +275,6 @@ async function fetchAllSportsResults() {
 
       // Vérifier si des résultats ont été récupérés
       if (results.length === 0) {
-        console.log(`Aucun résultat trouvé pour le sport : ${sport.name}`);
         continue;
       }
 
@@ -305,9 +291,6 @@ async function fetchAllSportsResults() {
         .toLowerCase()
         .replace(/ /g, "_")}.txt`;
       fs.writeFileSync(fileName, output, "utf8");
-      console.log(
-        `Les résultats de ${sport.name} ont été enregistrés dans ${fileName}`
-      );
     }
 
     // Tous les fichiers ont été créés
@@ -369,7 +352,6 @@ client.on("interactionCreate", async (interaction) => {
         }
       }
     } catch (error) {
-      console.error("Erreur lors de la lecture du fichier :", error);
       await interaction.reply("Impossible de lire les résultats.");
     }
   }
