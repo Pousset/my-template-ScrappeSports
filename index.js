@@ -9,6 +9,11 @@ const {
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
+const express = require("express");
+const path = require("path");
+
+const app = express();
+const PORT = 3000;
 
 // Charger les URLs depuis le fichier .env
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
@@ -221,6 +226,60 @@ client.on("interactionCreate", async (interaction) => {
       await interaction.reply("Impossible de lire les résultats.");
     }
   }
+});
+
+// Route pour afficher la page HTML regroupant les données des fichiers .txt
+app.get("/", (req, res) => {
+  const files = ["resultats_FM.txt", "resultats_basket.txt", "resultats_football.txt"];
+  let htmlContent = `
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Résultats des Matchs</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1 { text-align: center; }
+        pre { background: #f4f4f4; padding: 10px; border: 1px solid #ddd; overflow-x: auto; }
+        .file-section { margin-bottom: 20px; }
+      </style>
+    </head>
+    <body>
+      <h1>Résultats des Matchs</h1>
+  `;
+
+  files.forEach((file) => {
+    const filePath = path.join(__dirname, file);
+    if (fs.existsSync(filePath)) {
+      const fileContent = fs.readFileSync(filePath, "utf8");
+      htmlContent += `
+        <div class="file-section">
+          <h2>${file}</h2>
+          <pre>${fileContent}</pre>
+        </div>
+      `;
+    } else {
+      htmlContent += `
+        <div class="file-section">
+          <h2>${file}</h2>
+          <p>Fichier introuvable.</p>
+        </div>
+      `;
+    }
+  });
+
+  htmlContent += `
+    </body>
+    </html>
+  `;
+
+  res.send(htmlContent);
+});
+
+// Démarrez le serveur
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
 
 // Connectez le bot
