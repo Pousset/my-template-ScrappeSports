@@ -245,12 +245,10 @@ client.on("interactionCreate", async (interaction) => {
 
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
+  const dataFolderPath = path.join(__dirname, "data"); // Chemin vers le dossier 'data'
   const files = fs
-    .readdirSync(__dirname)
+    .readdirSync(dataFolderPath) // Lire les fichiers dans 'data'
     .filter((file) => file.endsWith(".txt"));
-
-  // Extraire les dates des URLs
-  const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
 
   let htmlContent = `
     <!DOCTYPE html>
@@ -269,12 +267,6 @@ app.get("/", (req, res) => {
         h1 {
           text-align: center;
           color: #333;
-        }
-        .date-info {
-          text-align: center;
-          margin-bottom: 20px;
-          font-size: 18px;
-          color: #555;
         }
         .file-section {
           margin-bottom: 40px;
@@ -314,13 +306,10 @@ app.get("/", (req, res) => {
     </head>
     <body>
       <h1>Résultats des Matchs</h1>
-      <div class="date-info">
-        <p>Date L'Équipe : ${lequipeDate}</p>
-      </div>
   `;
 
   files.forEach((file) => {
-    const filePath = path.join(__dirname, file);
+    const filePath = path.join(dataFolderPath, file); // Chemin complet vers le fichier
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf8");
       const rows = fileContent.split("\n").filter((line) => line.trim() !== "");
@@ -343,10 +332,9 @@ app.get("/", (req, res) => {
       `;
 
       rows.forEach((row) => {
-        const matchParts = row.split("Heure :")[0].trim();
         const matchRegex =
           /^(\d+)\.\s+(.+?)\s+\((\d*|N\/A)\)\s+vs\s+(.+?)\s+\((\d*|N\/A)\)\s*(Heure\s*:\s*(.+))?$/;
-        const matchData = matchParts.match(matchRegex);
+        const matchData = row.match(matchRegex);
 
         if (matchData) {
           const [, index, teamA, scoreA, teamB, scoreB] = matchData;
