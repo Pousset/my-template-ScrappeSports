@@ -95,7 +95,6 @@ async function fetchAllSportsResults() {
     const response = await axios.get(LEQUIPE_URL);
     const $ = cheerio.load(response.data);
 
-    // Extraire la date depuis l'URL après "/Directs/"
     const date = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
 
     const sportsLinks = [];
@@ -124,23 +123,26 @@ async function fetchAllSportsResults() {
         const homeTeam = sportPage(element)
           .find(".TeamScore__team--home .TeamScore__nameshort span")
           .text()
-          .trim();
+          .trim()
+          .replace(/\s+/g, " "); // Nettoyer les espaces
         const awayTeam = sportPage(element)
           .find(".TeamScore__team--away .TeamScore__nameshort span")
           .text()
-          .trim();
+          .trim()
+          .replace(/\s+/g, " "); // Nettoyer les espaces
         const homeScore = sportPage(element)
           .find(".TeamScore__score--home")
           .text()
-          .trim();
+          .trim() || "N/A";
         const awayScore = sportPage(element)
           .find(".TeamScore__score--away")
           .text()
-          .trim();
+          .trim() || "N/A";
         const time = sportPage(element)
           .find(".TeamScore__schedule span")
           .text()
-          .trim();
+          .trim()
+          .replace(/\s+/g, " ") || "N/A"; // Nettoyer les espaces
 
         results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
       });
@@ -190,12 +192,32 @@ function cleanObsoleteFiles(currentUrl) {
   });
 }
 
+// Fonction pour reformater les fichiers existants
+function reformatExistingFiles() {
+  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
+
+  files.forEach((file) => {
+    const filePath = path.join(__dirname, file);
+    const content = fs.readFileSync(filePath, "utf8");
+
+    // Reformater le contenu
+    const lines = content.split("\n").map((line) => line.trim().replace(/\s+/g, " "));
+    const reformattedContent = lines.join("\n");
+
+    fs.writeFileSync(filePath, reformattedContent, "utf8");
+    console.log(`Le fichier ${file} a été reformatté.`);
+  });
+}
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
 
   // Nettoyer les fichiers obsolètes
   cleanObsoleteFiles(LEQUIPE_URL);
+
+  // Reformater les fichiers existants
+  reformatExistingFiles();
 
   // Lancer le scraping
   fetchFootballResults();
@@ -338,25 +360,27 @@ app.get("/", (req, res) => {
 
       rows.forEach((row) => {
         const matchParts = row.split("Heure :")[0].trim();
-        const matchRegex = /^(\d+)\.\s+(.+)\((\d+)\)\s+vs\s+(.+)\((\d+)\)$/;
+        const matchRegex = /^(\d+)\.\s+(.+?)\s+\((\d*|N\/A)\)\s+vs\s+(.+?)\s+\((\d*|N\/A)\)\s*(Heure\s*:\s*(.+))?$/;
         const matchData = matchParts.match(matchRegex);
 
         if (matchData) {
           const [, index, teamA, scoreA, teamB, scoreB] = matchData;
           const winner =
-            parseInt(scoreA) > parseInt(scoreB)
-              ? teamA.trim()
-              : parseInt(scoreB) > parseInt(scoreA)
-              ? teamB.trim()
-              : "Égalité";
+            scoreA && scoreB
+              ? parseInt(scoreA) > parseInt(scoreB)
+                ? teamA.trim()
+                : parseInt(scoreB) > parseInt(scoreA)
+                ? teamB.trim()
+                : "Égalité"
+              : "Match non joué";
 
           htmlContent += `
             <tr>
               <td>${index}</td>
               <td>${teamA.trim()}</td>
               <td>${teamB.trim()}</td>
-              <td>${scoreA}</td>
-              <td>${scoreB}</td>
+              <td>${scoreA || "N/A"}</td>
+              <td>${scoreB || "N/A"}</td>
               <td>${winner}</td>
             </tr>
           `;
