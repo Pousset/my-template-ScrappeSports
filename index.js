@@ -150,7 +150,8 @@ async function fetchAllSportsResults() {
         continue;
       }
 
-      let output = `Résultats des matchs de ${sport.name} (${date}) :\n`;
+      let output = `# URL : ${LEQUIPE_URL}\n`;
+      output += `Résultats des matchs de ${sport.name} (${date}) :\n`;
       results.forEach((result, index) => {
         output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
           result.awayTeam
@@ -172,11 +173,33 @@ async function fetchAllSportsResults() {
   }
 }
 
+// Fonction pour nettoyer les fichiers obsolètes
+function cleanObsoleteFiles(currentUrl) {
+  const files = fs.readdirSync(__dirname).filter((file) => file.endsWith(".txt"));
+
+  files.forEach((file) => {
+    const filePath = path.join(__dirname, file);
+    const content = fs.readFileSync(filePath, "utf8");
+
+    // Vérifier si le fichier contient l'URL actuelle
+    const urlMatch = content.match(/^# URL : (.+)$/m);
+    if (!urlMatch || urlMatch[1] !== currentUrl) {
+      console.log(`Suppression du fichier obsolète : ${file}`);
+      fs.unlinkSync(filePath);
+    }
+  });
+}
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
-  fetchFootballResults(); // Scraper FootMercato
-  fetchAllSportsResults(); // Scraper tous les sports, y compris le football
+
+  // Nettoyer les fichiers obsolètes
+  cleanObsoleteFiles(LEQUIPE_URL);
+
+  // Lancer le scraping
+  fetchFootballResults();
+  fetchAllSportsResults();
 });
 
 // Gérer les interactions avec les commandes
