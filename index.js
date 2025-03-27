@@ -11,6 +11,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const express = require("express");
 const path = require("path");
+const moment = require("moment"); // Installez moment.js pour manipuler les dates : npm install moment
 
 const app = express();
 const PORT = 3000;
@@ -46,84 +47,102 @@ const rest = new REST({ version: "10" }).setToken(TOKEN);
 })();
 
 // Fonction pour scraper tous les sports depuis L'Équipe
-async function fetchAllSportsResults() {
+async function fetchAllSportsResults(urls) {
   try {
-    const response = await axios.get(LEQUIPE_URL);
-    const $ = cheerio.load(response.data);
+    const allResults = await Promise.all(
+      urls.map(async (url) => {
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
 
-    const date = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
+        const date = url.split("/Directs/")[1] || "Date inconnue";
 
-    const sportsLinks = [];
-    $("a.Link.LiveListingWidget__title").each((_, element) => {
-      const sportName = $(element).text().trim();
-      const sportLink = $(element).attr("href");
-      if (sportName && sportLink) {
-        sportsLinks.push({
-          name: sportName,
-          url: `https://www.lequipe.fr${sportLink}`,
+        const sportsLinks = [];
+        $("a.Link.LiveListingWidget__title").each((_, element) => {
+          const sportName = $(element).text().trim();
+          const sportLink = $(element).attr("href");
+          if (sportName && sportLink) {
+            sportsLinks.push({
+              name: sportName,
+              url: `https://www.lequipe.fr${sportLink}`,
+            });
+          }
         });
-      }
-    });
 
-    if (sportsLinks.length === 0) {
-      console.log("Aucun sport trouvé sur la page.");
-      return;
-    }
+        if (sportsLinks.length === 0) {
+          console.log(`Aucun sport trouvé pour la date : ${date}`);
+          return;
+        }
 
-    for (const sport of sportsLinks) {
-      const sportResponse = await axios.get(sport.url);
-      const sportPage = cheerio.load(sportResponse.data);
+        for (const sport of sportsLinks) {
+          const sportResponse = await axios.get(sport.url);
+          const sportPage = cheerio.load(sportResponse.data);
 
-      const results = [];
-      sportPage(".SportEventWidget--match").each((_, element) => {
-        const homeTeam = sportPage(element)
-          .find(".TeamScore__team--home .TeamScore__nameshort span:first-child")
-          .text()
-          .trim();
-        const awayTeam = sportPage(element)
-          .find(".TeamScore__team--away .TeamScore__nameshort span:first-child")
-          .text()
-          .trim();
-        const homeScore =
-          sportPage(element).find(".TeamScore__score--home").text().trim() ||
-          "N/A";
-        const awayScore =
-          sportPage(element).find(".TeamScore__score--away").text().trim() ||
-          "N/A";
-        const time =
-          sportPage(element).find(".TeamScore__schedule span").text().trim() ||
-          "N/A";
+          const results = [];
+          sportPage(".SportEventWidget--match").each((_, element) => {
+            const homeTeam = sportPage(element)
+              .find(
+                ".TeamScore__team--home .TeamScore__nameshort span:first-child"
+              )
+              .text()
+              .trim();
+            const awayTeam = sportPage(element)
+              .find(
+                ".TeamScore__team--away .TeamScore__nameshort span:first-child"
+              )
+              .text()
+              .trim();
+            const homeScore =
+              sportPage(element)
+                .find(".TeamScore__score--home")
+                .text()
+                .trim() || "N/A";
+            const awayScore =
+              sportPage(element)
+                .find(".TeamScore__score--away")
+                .text()
+                .trim() || "N/A";
+            const time =
+              sportPage(element)
+                .find(".TeamScore__schedule span")
+                .text()
+                .trim() || "N/A";
 
-        results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
-      });
+            results.push({ homeTeam, awayTeam, homeScore, awayScore, time });
+          });
 
-      if (results.length === 0) {
-        console.log(`Aucun résultat trouvé pour le sport : ${sport.name}`);
-        continue;
-      }
+          if (results.length === 0) {
+            console.log(`Aucun résultat trouvé pour le sport : ${sport.name}`);
+            continue;
+          }
 
-      let output = `# URL : ${LEQUIPE_URL}\n`;
-      output += `Résultats des matchs de ${sport.name} (${date}) :\n`;
-      results.forEach((result, index) => {
-        output += `${index + 1}. ${result.homeTeam} (${result.homeScore}) vs ${
-          result.awayTeam
-        } (${result.awayScore})\n   Heure : ${result.time}\n\n`;
-      });
+          let output = `# URL : ${url}\n`;
+          output += `Résultats des matchs de ${sport.name} (${date}) :\n`;
+          results.forEach((result, index) => {
+            output += `${index + 1}. ${result.homeTeam} (${
+              result.homeScore
+            }) vs ${result.awayTeam} (${result.awayScore})\n   Heure : ${
+              result.time
+            }\n\n`;
+          });
 
-      const fileName = path.join(
-        __dirname,
-        "data",
-        `resultats_${sport.name.toLowerCase().replace(/ /g, "_")}.txt`
-      );
-      fs.writeFileSync(fileName, output, "utf8");
-      console.log(
-        `Résultats de ${sport.name} enregistrés pour la date : ${date}`
-      );
-    }
+          const fileName = path.join(
+            __dirname,
+            "data",
+            `resultats_${sport.name
+              .toLowerCase()
+              .replace(/ /g, "_")}_${date}.txt`
+          );
+          fs.writeFileSync(fileName, output, "utf8");
+          console.log(
+            `Résultats de ${sport.name} enregistrés pour la date : ${date}`
+          );
+        }
+      })
+    );
 
     console.log("Tous les fichiers ont été créés.");
   } catch (error) {
-    console.error("Erreur lors du scraping de L'Équipe :", error);
+    console.error("Erreur lors du scraping :", error);
   }
 }
 
@@ -177,6 +196,24 @@ const ensureDataFolderExists = () => {
   }
 };
 
+// Fonction pour générer des URLs
+function generateUrls(baseUrl, startDate, daysBefore, daysAfter) {
+  const urls = [];
+  const start = moment(startDate).subtract(daysBefore, "days");
+  const end = moment(startDate).add(daysAfter, "days");
+
+  for (
+    let date = start.clone();
+    date.isSameOrBefore(end);
+    date.add(1, "days")
+  ) {
+    const formattedDate = date.format("YYYYMMDD");
+    urls.push(`${baseUrl}${formattedDate}`);
+  }
+
+  return urls;
+}
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
@@ -190,8 +227,13 @@ client.once("ready", () => {
   // Reformater les fichiers existants
   reformatExistingFiles();
 
-  // Lancer le scraping
-  fetchAllSportsResults();
+  // Générer les URLs pour une plage de dates
+  const baseUrl = "https://www.lequipe.fr/Directs/";
+  const startDate = "20250401"; // Date de référence
+  const urls = generateUrls(baseUrl, startDate, 15, 15);
+
+  // Lancer le scraping pour toutes les URLs
+  fetchAllSportsResults(urls);
 });
 
 // Gérer les interactions avec les commandes
