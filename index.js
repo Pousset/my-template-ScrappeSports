@@ -19,32 +19,64 @@ const PORT = 3000;
 // Charger les URLs depuis le fichier .env
 const LEQUIPE_URL = process.env.LEQUIPE_URL;
 
-// Extraire les dates des URLs
-const lequipeDate = LEQUIPE_URL.split("/Directs/")[1] || "Date inconnue";
-
 // Créez une instance du client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 
-// Enregistrement de la commande /resultats
-const commands = [
-  new SlashCommandBuilder()
-    .setName("resultats")
-    .setDescription("Affiche les résultats des matchs."),
-];
+// Fonction pour réinitialiser le dossier 'data'
+function resetDataFolder() {
+  const dataFolderPath = path.join(__dirname, "data");
 
-const rest = new REST({ version: "10" }).setToken(TOKEN);
-
-(async () => {
-  try {
-    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
-    console.log("Commandes enregistrées avec succès !");
-  } catch (error) {
-    console.error("Erreur lors de l'enregistrement des commandes :", error);
+  // Supprimer le dossier 'data' s'il existe
+  if (fs.existsSync(dataFolderPath)) {
+    fs.rmSync(dataFolderPath, { recursive: true, force: true });
+    console.log("Dossier 'data' supprimé.");
   }
-})();
+
+  // Recréer le dossier 'data'
+  fs.mkdirSync(dataFolderPath);
+  console.log("Dossier 'data' recréé.");
+}
+
+// Fonction pour extraire la date de l'URL
+function extractDateFromUrl(url) {
+  const match = url.match(/\/Directs\/(\d{8})/);
+  return match ? match[1] : null;
+}
+
+// Fonction pour générer des URLs
+function generateUrls(baseUrl, startDate, daysBefore, daysAfter) {
+  const urls = [];
+  const start = moment(startDate).subtract(daysBefore, "days");
+  const end = moment(startDate).add(daysAfter, "days");
+
+  for (
+    let date = start.clone();
+    date.isSameOrBefore(end);
+    date.add(1, "days")
+  ) {
+    const formattedDate = date.format("YYYYMMDD");
+    urls.push(`${baseUrl}${formattedDate}`);
+  }
+
+  return urls;
+}
+
+// Fonction pour s'assurer que le dossier pour un sport existe
+const ensureSportFolderExists = (sportName) => {
+  const sportFolderPath = path.join(
+    __dirname,
+    "data",
+    sportName.toLowerCase().replace(/ /g, "_")
+  );
+  if (!fs.existsSync(sportFolderPath)) {
+    fs.mkdirSync(sportFolderPath);
+    console.log(`Dossier pour le sport '${sportName}' créé.`);
+  }
+  return sportFolderPath;
+};
 
 // Fonction pour scraper tous les sports depuis L'Équipe
 async function fetchAllSportsResults(urls) {
@@ -115,6 +147,9 @@ async function fetchAllSportsResults(urls) {
             continue;
           }
 
+          // Créer un dossier pour le sport
+          const sportFolderPath = ensureSportFolderExists(sport.name);
+
           let output = `# URL : ${url}\n`;
           output += `Résultats des matchs de ${sport.name} (${date}) :\n`;
           results.forEach((result, index) => {
@@ -126,8 +161,7 @@ async function fetchAllSportsResults(urls) {
           });
 
           const fileName = path.join(
-            __dirname,
-            "data",
+            sportFolderPath,
             `resultats_${sport.name
               .toLowerCase()
               .replace(/ /g, "_")}_${date}.txt`
@@ -146,92 +180,12 @@ async function fetchAllSportsResults(urls) {
   }
 }
 
-// Fonction pour nettoyer les fichiers obsolètes
-function cleanObsoleteFiles(currentUrl) {
-  const dataFolderPath = path.join(__dirname, "data");
-  const files = fs
-    .readdirSync(dataFolderPath)
-    .filter((file) => file.endsWith(".txt"));
-
-  files.forEach((file) => {
-    const filePath = path.join(dataFolderPath, file);
-    const content = fs.readFileSync(filePath, "utf8");
-
-    const urlMatch = content.match(/^# URL : (.+)$/m);
-    if (!urlMatch || urlMatch[1] !== currentUrl) {
-      console.log(`Suppression du fichier obsolète : ${file}`);
-      fs.unlinkSync(filePath);
-    }
-  });
-}
-
-// Fonction pour reformater les fichiers existants
-function reformatExistingFiles() {
-  const dataFolderPath = path.join(__dirname, "data");
-  const files = fs
-    .readdirSync(dataFolderPath)
-    .filter((file) => file.endsWith(".txt"));
-
-  files.forEach((file) => {
-    const filePath = path.join(dataFolderPath, file);
-    const content = fs.readFileSync(filePath, "utf8");
-
-    // Reformater le contenu
-    const lines = content
-      .split("\n")
-      .map((line) => line.trim().replace(/\s+/g, " "));
-    const reformattedContent = lines.join("\n");
-
-    fs.writeFileSync(filePath, reformattedContent, "utf8");
-    console.log(`Le fichier ${file} a été reformatté.`);
-  });
-}
-
-// Fonction pour s'assurer que le dossier 'data' existe
-const ensureDataFolderExists = () => {
-  const dataFolderPath = path.join(__dirname, "data");
-  if (!fs.existsSync(dataFolderPath)) {
-    fs.mkdirSync(dataFolderPath);
-    console.log("Dossier 'data' créé.");
-  }
-};
-
-// Fonction pour générer des URLs
-function generateUrls(baseUrl, startDate, daysBefore, daysAfter) {
-  const urls = [];
-  const start = moment(startDate).subtract(daysBefore, "days");
-  const end = moment(startDate).add(daysAfter, "days");
-
-  for (
-    let date = start.clone();
-    date.isSameOrBefore(end);
-    date.add(1, "days")
-  ) {
-    const formattedDate = date.format("YYYYMMDD");
-    urls.push(`${baseUrl}${formattedDate}`);
-  }
-
-  return urls;
-}
-
-// Fonction pour extraire la date de l'URL
-function extractDateFromUrl(url) {
-  const match = url.match(/\/Directs\/(\d{8})/);
-  return match ? match[1] : null;
-}
-
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
 
-  // Vérifier et créer le dossier 'data' si nécessaire
-  ensureDataFolderExists();
-
-  // Nettoyer les fichiers obsolètes
-  cleanObsoleteFiles(LEQUIPE_URL);
-
-  // Reformater les fichiers existants
-  reformatExistingFiles();
+  // Réinitialiser le dossier 'data'
+  resetDataFolder();
 
   // Générer les URLs pour une plage de dates en se basant sur l'URL dans .env
   const baseUrl = LEQUIPE_URL.split("/Directs/")[0] + "/Directs/";
@@ -245,61 +199,14 @@ client.once("ready", () => {
   }
 });
 
-// Gérer les interactions avec les commandes
-client.on("interactionCreate", async (interaction) => {
-  if (!interaction.isCommand()) return;
-
-  if (interaction.commandName === "resultats") {
-    try {
-      // Lire le contenu du fichier L'Équipe
-      const results = fs.readFileSync("resultats_lequipe.txt", "utf8");
-
-      // Diviser les résultats par match
-      const matches = results.split("\n\n"); // Chaque match est séparé par une ligne vide
-
-      let currentMessage = "```";
-      const messages = [];
-
-      for (const match of matches) {
-        // Ajouter le match au message actuel si cela ne dépasse pas 2000 caractères
-        if ((currentMessage + match + "\n\n```").length <= 2000) {
-          currentMessage += match + "\n\n";
-        } else {
-          // Si le message dépasse 2000 caractères, sauvegarder le message actuel et commencer un nouveau
-          currentMessage += "```";
-          messages.push(currentMessage);
-          currentMessage = "```" + match + "\n\n";
-        }
-      }
-
-      // Ajouter le dernier message restant
-      if (currentMessage !== "```") {
-        currentMessage += "```";
-        messages.push(currentMessage);
-      }
-
-      // Envoyer les messages un par un
-      for (let i = 0; i < messages.length; i++) {
-        if (i === 0) {
-          // Répondre au premier message
-          await interaction.reply(messages[i]);
-        } else {
-          // Envoyer les messages suivants
-          await interaction.followUp(messages[i]);
-        }
-      }
-    } catch (error) {
-      await interaction.reply("Impossible de lire les résultats.");
-    }
-  }
-});
-
 // Route pour afficher la page HTML regroupant les données des fichiers .txt
 app.get("/", (req, res) => {
-  const dataFolderPath = path.join(__dirname, "data"); // Chemin vers le dossier 'data'
-  const files = fs
-    .readdirSync(dataFolderPath) // Lire les fichiers dans 'data'
-    .filter((file) => file.endsWith(".txt"));
+  const dataFolderPath = path.join(__dirname, "data");
+  const sportsFolders = fs
+    .readdirSync(dataFolderPath)
+    .filter((folder) =>
+      fs.statSync(path.join(dataFolderPath, folder)).isDirectory()
+    );
 
   let htmlContent = `
     <!DOCTYPE html>
@@ -359,15 +266,22 @@ app.get("/", (req, res) => {
       <h1>Résultats des Matchs</h1>
   `;
 
-  files.forEach((file) => {
-    const filePath = path.join(dataFolderPath, file); // Chemin complet vers le fichier
-    if (fs.existsSync(filePath)) {
+  sportsFolders.forEach((sport) => {
+    const sportFolderPath = path.join(dataFolderPath, sport);
+    const files = fs
+      .readdirSync(sportFolderPath)
+      .filter((file) => file.endsWith(".txt"));
+
+    htmlContent += `<h2>${sport.toUpperCase()}</h2>`;
+
+    files.forEach((file) => {
+      const filePath = path.join(sportFolderPath, file);
       const fileContent = fs.readFileSync(filePath, "utf8");
       const rows = fileContent.split("\n").filter((line) => line.trim() !== "");
 
       htmlContent += `
         <div class="file-section">
-          <h2>${file}</h2>
+          <h3>${file}</h3>
           <table>
             <thead>
               <tr>
@@ -416,14 +330,7 @@ app.get("/", (req, res) => {
           </table>
         </div>
       `;
-    } else {
-      htmlContent += `
-        <div class="file-section">
-          <h2>${file}</h2>
-          <p>Fichier introuvable.</p>
-        </div>
-      `;
-    }
+    });
   });
 
   htmlContent += `
