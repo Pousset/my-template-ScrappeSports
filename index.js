@@ -214,6 +214,12 @@ function generateUrls(baseUrl, startDate, daysBefore, daysAfter) {
   return urls;
 }
 
+// Fonction pour extraire la date de l'URL
+function extractDateFromUrl(url) {
+  const match = url.match(/\/Directs\/(\d{8})/);
+  return match ? match[1] : null;
+}
+
 // Événement déclenché lorsque le bot est prêt
 client.once("ready", () => {
   console.log(`Bot connecté en tant que ${client.user.tag}`);
@@ -227,13 +233,16 @@ client.once("ready", () => {
   // Reformater les fichiers existants
   reformatExistingFiles();
 
-  // Générer les URLs pour une plage de dates
-  const baseUrl = "https://www.lequipe.fr/Directs/";
-  const startDate = "20250401"; // Date de référence
-  const urls = generateUrls(baseUrl, startDate, 15, 15);
+  // Générer les URLs pour une plage de dates en se basant sur l'URL dans .env
+  const baseUrl = LEQUIPE_URL.split("/Directs/")[0] + "/Directs/";
+  const startDate = extractDateFromUrl(LEQUIPE_URL); // Extraire la date de l'URL
 
-  // Lancer le scraping pour toutes les URLs
-  fetchAllSportsResults(urls);
+  if (startDate) {
+    const urls = generateUrls(baseUrl, startDate, 15, 15); // Générer les URLs
+    fetchAllSportsResults(urls); // Lancer le scraping
+  } else {
+    console.error("Impossible d'extraire la date de l'URL dans .env.");
+  }
 });
 
 // Gérer les interactions avec les commandes
